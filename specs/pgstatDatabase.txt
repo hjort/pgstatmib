@@ -1,0 +1,93 @@
+pgstatDatabaseTable
+===================
+
+One row per database in the instance, showing database OID, database name, number of active server processes connected to that database (backends), number of transactions committed and rolled back in that database, total disk blocks read, total buffer hits (i.e., block read requests avoided by finding the block already in buffer cache), number of rows returned, fetched, inserted, updated and deleted, the total number of queries canceled due to conflict with recovery (on standby servers), and time of last statistics reset.
+
+SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
+
+SELECT *,
+	trunc(xact_rollback::numeric / (xact_commit + xact_rollback) * 100, 4) as rollback_ratio,
+	trunc(blks_hit::numeric / (blks_hit + blks_read) * 100, 4) as cache_hit_ratio,
+	(tup_inserted + tup_updated + tup_deleted) as tup_modified
+FROM pg_stat_database
+WHERE datname !~ '^template'
+ORDER BY datid;
+
+Variable Name			Object ID			View Field	Sample Value
+-----------------------------	--------------------------	--------------	------------------
+pgstatDatabaseIndex		1.3.6.1.4.1.27645.3.1.1		datid		16384
+pgstatDatabaseName		1.3.6.1.4.1.27645.3.1.2		datname		pgbench
+pgstatDatabaseBackends		1.3.6.1.4.1.27645.3.1.3		numbackends	10
+pgstatDatabaseCommits		1.3.6.1.4.1.27645.3.1.4		xact_commit	22582
+pgstatDatabaseRollbacks		1.3.6.1.4.1.27645.3.1.5		xact_rollback	1
+pgstatDatabaseBlocksRead	1.3.6.1.4.1.27645.3.1.6		blks_read	11556
+pgstatDatabaseBlocksHit		1.3.6.1.4.1.27645.3.1.7		blks_hit	2849275
+pgstatDatabaseTuplesReturned	1.3.6.1.4.1.27645.3.1.8		tup_returned	1467829
+pgstatDatabaseTuplesFetched	1.3.6.1.4.1.27645.3.1.9		tup_fetched	1182480
+pgstatDatabaseTuplesInserted	1.3.6.1.4.1.27645.3.1.10	tup_inserted	211416
+pgstatDatabaseTuplesUpdated	1.3.6.1.4.1.27645.3.1.11	tup_updated	33633
+pgstatDatabaseTuplesDeleted	1.3.6.1.4.1.27645.3.1.12	tup_deleted	94
+.............................................................................................................
+pgstatDatabaseRollbackRatio	1.3.6.1.4.1.27645.3.1.21	xact_rollback / (xact_commit + xact_rollback)
+pgstatDatabaseCacheHitRatio	1.3.6.1.4.1.27645.3.1.22	blks_hit / (blks_hit + blks_read)
+pgstatDatabaseTuplesModified	1.3.6.1.4.1.27645.3.1.23	tup_inserted + tup_updated + tup_deleted
+
+postgres=# SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
+-[ RECORD 1 ]-+---------
+datid         | 11874
+datname       | postgres
+numbackends   | 1
+xact_commit   | 579
+xact_rollback | 1
+blks_read     | 5474
+blks_hit      | 60466
+tup_returned  | 155253
+tup_fetched   | 23935
+tup_inserted  | 100315
+tup_updated   | 637
+tup_deleted   | 94
+-[ RECORD 2 ]-+---------
+datid         | 16384
+datname       | pgbench
+numbackends   | 0
+xact_commit   | 22582
+xact_rollback | 1
+blks_read     | 11556
+blks_hit      | 2849275
+tup_returned  | 1467829
+tup_fetched   | 1182480
+tup_inserted  | 211416
+tup_updated   | 33633
+tup_deleted   | 94
+
+postgres=# SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
+ datid | datname  | numbackends | xact_commit | xact_rollback | blks_read | blks_hit | tup_returned | tup_fetch
+ed | tup_inserted | tup_updated | tup_deleted 
+-------+----------+-------------+-------------+---------------+-----------+----------+--------------+----------
+---+--------------+-------------+-------------
+ 11874 | postgres |           1 |         575 |             1 |      5474 |    60395 |       154620 |       238
+77 |       100315 |         637 |          94
+ 16384 | pgbench  |           0 |       22580 |             1 |     11556 |  2849221 |      1467221 |     11824
+65 |       211416 |       33633 |          94
+(2 rows)
+
+postgres=# \d+ pg_stat_database
+             View "pg_catalog.pg_stat_database"
+    Column     |  Type   | Modifiers | Storage | Description 
+---------------+---------+-----------+---------+-------------
+ datid         | oid     |           | plain   | 
+ datname       | name    |           | plain   | 
+ numbackends   | integer |           | plain   | 
+ xact_commit   | bigint  |           | plain   | 
+ xact_rollback | bigint  |           | plain   | 
+ blks_read     | bigint  |           | plain   | 
+ blks_hit      | bigint  |           | plain   | 
+ tup_returned  | bigint  |           | plain   | 
+ tup_fetched   | bigint  |           | plain   | 
+ tup_inserted  | bigint  |           | plain   | 
+ tup_updated   | bigint  |           | plain   | 
+ tup_deleted   | bigint  |           | plain   | 
+View definition:
+ SELECT d.oid AS datid, d.datname, pg_stat_get_db_numbackends(d.oid) AS numbackends, pg_stat_get_db_xact_commit(d.oid) AS xact_commit, pg_stat_get_db_xact_rollback(d.oid) AS xact_rollback, pg_stat_get_db_blocks_fetched(d.oid) - pg_stat_get_db_blocks_hit(d.oid) AS blks_read, pg_stat_get_db_blocks_hit(d.oid) AS blks_hit, pg_stat_get_db_tuples_returned(d.oid) AS tup_returned, pg_stat_get_db_tuples_fetched(d.oid) AS tup_fetched, pg_stat_get_db_tuples_inserted(d.oid) AS tup_inserted, pg_stat_get_db_tuples_updated(d.oid) AS tup_updated, pg_stat_get_db_tuples_deleted(d.oid) AS tup_deleted
+   FROM pg_database d;
+
