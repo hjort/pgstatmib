@@ -1,0 +1,34 @@
+tuples: 2
+
+pgstatDatabaseIndex.1 = 11874
+pgstatDatabaseName.1 = postgres
+pgstatDatabaseBackends.1 = 1
+pgstatDatabaseCommits.1 = 194
+pgstatDatabaseRollbacks.1 = 0
+pgstatDatabaseBlocksRead.1 = 113
+pgstatDatabaseBlocksHit.1 = 11834
+pgstatDatabaseTuplesReturned.1 = 42346
+pgstatDatabaseTuplesFetched.1 = 5971
+pgstatDatabaseTuplesInserted.1 = 0
+pgstatDatabaseTuplesUpdated.1 = 0
+pgstatDatabaseTuplesDeleted.1 = 0
+pgstatDatabaseRollbackRatio.1 = 0.0000
+pgstatDatabaseCacheHitRatio.1 = 99.0541
+pgstatDatabaseTuplesModified.1 = 0
+
+pgstatDatabaseIndex.2 = 16385
+pgstatDatabaseName.2 = rodrigo
+pgstatDatabaseBackends.2 = 0
+pgstatDatabaseCommits.2 = 1934
+pgstatDatabaseRollbacks.2 = 1
+pgstatDatabaseBlocksRead.2 = 6346
+pgstatDatabaseBlocksHit.2 = 36452
+pgstatDatabaseTuplesReturned.2 = 167539
+pgstatDatabaseTuplesFetched.2 = 6359
+pgstatDatabaseTuplesInserted.2 = 101848
+pgstatDatabaseTuplesUpdated.2 = 5219
+pgstatDatabaseTuplesDeleted.2 = 0
+pgstatDatabaseRollbackRatio.2 = 0.0516
+pgstatDatabaseCacheHitRatio.2 = 85.1722
+pgstatDatabaseTuplesModified.2 = 107067
+

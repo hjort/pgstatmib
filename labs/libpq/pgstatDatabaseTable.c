@@ -19,6 +19,14 @@ main(int argc, char **argv)
 	int			i,
 				j;
 
+	const char* suffixes[] = {
+		"Index", "Name", "Backends",
+		"Commits", "Rollbacks",
+		"BlocksRead", "BlocksHit",
+		"TuplesReturned", "TuplesFetched",
+		"TuplesInserted", "TuplesUpdated", "TuplesDeleted",
+		"RollbackRatio", "CacheHitRatio", "TuplesModified"};
+
 	/*
 	 * If the user supplies a parameter on the command line, use it as the
 	 * conninfo string; otherwise default to setting dbname=postgres and using
@@ -40,6 +48,36 @@ main(int argc, char **argv)
 		exit_nicely(conn);
 	}
 
+	// ...
+	res = PQexec(conn, "\
+SELECT datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, \
+	tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, \
+	trunc(xact_rollback::numeric / (xact_commit + xact_rollback) * 100, 4) as rollback_ratio, \
+	trunc(blks_hit::numeric / (blks_hit + blks_read) * 100, 4) as cache_hit_ratio, \
+	(tup_inserted + tup_updated + tup_deleted) as tup_modified \
+FROM pg_stat_database \
+WHERE datname !~ '^template' \
+ORDER BY datid");
+	printf("tuples: %d\n", PQntuples(res));
+	if (PQresultStatus(res) != PGRES_TUPLES_OK)
+	{
+		fprintf(stderr, "SELECT command failed: %s", PQerrorMessage(conn));
+		PQclear(res);
+		exit_nicely(conn);
+	}
+
+	printf("\n");
+	nFields = PQnfields(res);
+	for (i = 0; i < PQntuples(res); i++) {
+		for (j = 0; j < nFields; j++)
+			printf("pgstatDatabase%s.%d = %s\n", suffixes[j], i + 1, PQgetvalue(res, i, j));
+		printf("\n");
+	}
+
+	//printf("\n\n");
+	PQclear(res);
+	// ...
+
 	/*
 	 * Our test case here involves using a cursor, for which we must be inside
 	 * a transaction block.  We could do the whole thing with a single
@@ -48,24 +86,24 @@ main(int argc, char **argv)
 	 */
 
 	/* Start a transaction block */
-	res = PQexec(conn, "BEGIN");
+	/*res = PQexec(conn, "BEGIN");
 	if (PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 		fprintf(stderr, "BEGIN command failed: %s", PQerrorMessage(conn));
 		PQclear(res);
 		exit_nicely(conn);
-	}
+	}*/
 
 	/*
 	 * Should PQclear PGresult whenever it is no longer needed to avoid memory
 	 * leaks
 	 */
-	PQclear(res);
+	/*PQclear(res);*/
 
 	/*
 	 * Fetch rows from pg_database, the system catalog of databases
 	 */
-	res = PQexec(conn, "DECLARE myportal CURSOR FOR select * from pg_database");
+	/*res = PQexec(conn, "DECLARE myportal CURSOR FOR select * from pg_database");
 	if (PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 		fprintf(stderr, "DECLARE CURSOR failed: %s", PQerrorMessage(conn));
@@ -80,31 +118,31 @@ main(int argc, char **argv)
 		fprintf(stderr, "FETCH ALL failed: %s", PQerrorMessage(conn));
 		PQclear(res);
 		exit_nicely(conn);
-	}
+	}*/
 
 	/* first, print out the attribute names */
-	nFields = PQnfields(res);
+	/*nFields = PQnfields(res);
 	for (i = 0; i < nFields; i++)
 		printf("%-15s", PQfname(res, i));
-	printf("\n\n");
+	printf("\n\n");*/
 
 	/* next, print out the rows */
-	for (i = 0; i < PQntuples(res); i++)
+	/*for (i = 0; i < PQntuples(res); i++)
 	{
 		for (j = 0; j < nFields; j++)
 			printf("%-15s", PQgetvalue(res, i, j));
 		printf("\n");
 	}
 
-	PQclear(res);
+	PQclear(res);*/
 
 	/* close the portal ... we don't bother to check for errors ... */
-	res = PQexec(conn, "CLOSE myportal");
-	PQclear(res);
+	/*res = PQexec(conn, "CLOSE myportal");
+	PQclear(res);*/
 
 	/* end the transaction */
-	res = PQexec(conn, "END");
-	PQclear(res);
+	/*res = PQexec(conn, "END");
+	PQclear(res);*/
 
 	/* close the connection to the database and cleanup */
 	PQfinish(conn);
