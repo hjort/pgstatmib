@@ -1,0 +1,46 @@
+pgstatBgWriter
+==============
+
+One row only, showing cluster-wide statistics from the background writer: number of scheduled checkpoints, requested checkpoints, buffers written by checkpoints and cleaning scans, and the number of times the background writer stopped a cleaning scan because it had written too many buffers. Also includes statistics about the shared buffer pool, including buffers written by backends (that is, not by the background writer), how many times those backends had to execute their own fsync calls (normally the background writer handles those even when the backend does its own write), total buffers allocated, and time of last statistics reset.
+
+
+SELECT checkpoints_timed, checkpoints_req,
+	buffers_checkpoint, buffers_clean,
+	maxwritten_clean, buffers_backend, buffers_alloc
+FROM pg_stat_bgwriter;
+
+Variable Name				Object ID			View Field		Sample Value
+--------------------------------	--------------------------	-------------------	------------------
+pgstatBgWriterCheckpointsTimed		1.3.6.1.4.1.27645.3.10.1.0	checkpoints_timed	14
+pgstatBgWriterCheckpointsReq		
+
+
+ checkpoints_timed | checkpoints_req | buffers_checkpoint | buffers_clean | maxwritten_clean | buffers_backend | buffers_alloc 
+-------------------+-----------------+--------------------+---------------+------------------+-----------------+---------------
+                14 |               2 |               1522 |             0 |                0 |            5448 |          2074
+(1 row)
+
+postgres=# SELECT checkpoints_timed, checkpoints_req, buffers_checkpoint, buffers_clean, maxwritten_clean, buffers_backend, buffers_alloc FROM pg_stat_bgwriter;
+-[ RECORD 1 ]------+-----
+checkpoints_timed  | 14
+checkpoints_req    | 2
+buffers_checkpoint | 1522
+buffers_clean      | 0
+maxwritten_clean   | 0
+buffers_backend    | 5448
+buffers_alloc      | 2074
+
+postgres=# \d+ pg_stat_bgwriter
+               View "pg_catalog.pg_stat_bgwriter"
+       Column       |  Type  | Modifiers | Storage | Description 
+--------------------+--------+-----------+---------+-------------
+ checkpoints_timed  | bigint |           | plain   | 
+ checkpoints_req    | bigint |           | plain   | 
+ buffers_checkpoint | bigint |           | plain   | 
+ buffers_clean      | bigint |           | plain   | 
+ maxwritten_clean   | bigint |           | plain   | 
+ buffers_backend    | bigint |           | plain   | 
+ buffers_alloc      | bigint |           | plain   | 
+View definition:
+ SELECT pg_stat_get_bgwriter_timed_checkpoints() AS checkpoints_timed, pg_stat_get_bgwriter_requested_checkpoints() AS checkpoints_req, pg_stat_get_bgwriter_buf_written_checkpoints() AS buffers_checkpoint, pg_stat_get_bgwriter_buf_written_clean() AS buffers_clean, pg_stat_get_bgwriter_maxwritten_clean() AS maxwritten_clean, pg_stat_get_buf_written_backend() AS buffers_backend, pg_stat_get_buf_alloc() AS buffers_alloc;
+
