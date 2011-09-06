@@ -13,7 +13,7 @@
  * * GET and SET requests to this variable changing it's value as needed.
  */
 
-static int      nstAgentSubagentObject = 2;
+static int      nstAgentSubagentObject = 386;
 
 /*
  * our initialization routine, automatically called by the agent 
