@@ -13,6 +13,34 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
 |
 +--pgStatMIB(3)
    |
+   +--pgstatDatabase(1)
+   |  |
+   |  +--pgstatDatabaseEntry(1)
+   |     |  Index: pgstatDatabaseIndex
+   |     |
+   |     +-- -R-- Integer32 pgstatDatabaseIndex(1)
+   |     |        Range: 1..2147483647
+   |     +-- -R-- String    pgstatDatabaseName(2)
+   |     |        Textual Convention: DisplayString
+   |     |        Size: 0..64
+   |     +-- -R-- Gauge     pgstatDatabaseBackends(3)
+   |     +-- -R-- Counter   pgstatDatabaseCommits(4)
+   |     +-- -R-- Counter   pgstatDatabaseRollbacks(5)
+   |     +-- -R-- Counter   pgstatDatabaseBlocksRead(6)
+   |     +-- -R-- Counter   pgstatDatabaseBlocksHit(7)
+   |     +-- -R-- Counter   pgstatDatabaseTuplesReturned(8)
+   |     +-- -R-- Counter   pgstatDatabaseTuplesFetched(9)
+   |     +-- -R-- Counter   pgstatDatabaseTuplesInserted(10)
+   |     +-- -R-- Counter   pgstatDatabaseTuplesUpdated(11)
+   |     +-- -R-- Counter   pgstatDatabaseTuplesDeleted(12)
+   |     +-- -R-- Opaque    pgstatDatabaseRollbackRatio(21)
+   |     |        Textual Convention: Float
+   |     |        Size: 7
+   |     +-- -R-- Opaque    pgstatDatabaseCacheHitRatio(22)
+   |     |        Textual Convention: Float
+   |     |        Size: 7
+   |     +-- -R-- Counter   pgstatDatabaseTuplesModified(23)
+   |
    +--pgstatBgWriter(10)
       |
       +-- -R-- INTEGER   pgstatBgWriterCheckpointsTimed(1)
@@ -22,6 +50,19 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
       +-- -R-- INTEGER   pgstatBgWriterMaxWrittenClean(5)
       +-- -R-- INTEGER   pgstatBgWriterBuffersBackend(6)
       +-- -R-- INTEGER   pgstatBgWriterBuffersAllocated(7)
+
+
+Usage Sample
+------------
+
+$ snmpwalk localhost pgstatBgWriter
+PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 24
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 25
 
 
 Expected Sub-Entries
