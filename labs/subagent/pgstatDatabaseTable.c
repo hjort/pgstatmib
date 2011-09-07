@@ -20,7 +20,7 @@ initialize_table_pgstatDatabaseTable(void)
 //int32_t ival;
 //int32_t i, j;
 
-int32_t datid, ival;
+    int32_t datid, ival;
 
     /* create the table structure itself */
     table_set = netsnmp_create_table_data_set("pgstatDatabaseTable");
@@ -33,52 +33,30 @@ int32_t datid, ival;
      */
     DEBUGMSGTL(("initialize_table_pgstatDatabaseTable",
                 "adding indexes to table pgstatDatabaseTable\n"));
-//    netsnmp_table_set_add_indexes(table_set,
-//                           ASN_INTEGER,  // index: PGSTATDATABASEID
-//                           0);
-
-    /*
-     * set up what a row "should" look like, starting with the index 
-     */
-//    netsnmp_table_dataset_add_index(table_set, ASN_INTEGER);
-
-netsnmp_table_dataset_add_index(table_set, ASN_INTEGER);
+    netsnmp_table_set_add_indexes(table_set,
+                           ASN_INTEGER,  // index: PGSTATDATABASEID
+                           0);
 //netsnmp_table_dataset_add_index(table_set, ASN_INTEGER);
 
     DEBUGMSGTL(("initialize_table_pgstatDatabaseTable",
                 "adding column types to table pgstatDatabaseTable\n"));		 
     netsnmp_table_set_multi_add_default_row(table_set,
-            COLUMN_PGSTATDATABASEID, ASN_INTEGER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASENAME, ASN_OCTET_STR, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASECOMMITS, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASEROLLBACKS, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASEBLOCKSREAD, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASEBLOCKSHIT, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESRETURNED, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESFETCHED, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, 0,
-            NULL, 0,
-            COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, 0,
-            NULL, 0,
-	      0);
+            COLUMN_PGSTATDATABASEID, ASN_INTEGER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASENAME, ASN_OCTET_STR, 0, NULL, 0,
+            COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, 0, NULL, 0,
+            COLUMN_PGSTATDATABASECOMMITS, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASEROLLBACKS, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASEBLOCKSREAD, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASEBLOCKSHIT, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESRETURNED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESFETCHED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, 0, NULL, 0,
+            COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, 0, NULL, 0,
+            COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, 0, NULL, 0,
+	    0);
 
 /*netsnmp_table_set_add_default_row(table_set, COL3, ASN_INTEGER,   FALSE, NULL, 0);
 netsnmp_table_set_add_default_row(table_set, COL4, ASN_COUNTER,   FALSE, NULL, 0);
@@ -97,19 +75,19 @@ netsnmp_table_set_add_default_row(table_set, COL5, ASN_OCTET_STR, FALSE, NULL, 0
      * create the a row for the table, add the data, and add the row to the table 
      */
 
-	/*
-	$ snmpwalk localhost pgstatDatabase
-	PGSTAT-MIB::pgstatDatabaseId.11874 = INTEGER: 11874
-	PGSTAT-MIB::pgstatDatabaseId.16448 = INTEGER: 16448
-	PGSTAT-MIB::pgstatDatabaseName.11874 = STRING: postgres
-	PGSTAT-MIB::pgstatDatabaseName.16448 = STRING: rodrigo
-	PGSTAT-MIB::pgstatDatabaseBackends.11874 = Gauge32: 200
-	PGSTAT-MIB::pgstatDatabaseBackends.16448 = Gauge32: 10
-	PGSTAT-MIB::pgstatDatabaseCommits.11874 = Counter32: 50000
-	PGSTAT-MIB::pgstatDatabaseCommits.16448 = Counter32: 25000
-	PGSTAT-MIB::pgstatDatabaseRollbacks.11874 = Counter32: 100
-	PGSTAT-MIB::pgstatDatabaseRollbacks.16448 = Counter32: 50
-	*/
+/*
+$ snmpwalk localhost pgstatDatabase
+PGSTAT-MIB::pgstatDatabaseId.11874 = INTEGER: 11874
+PGSTAT-MIB::pgstatDatabaseId.16448 = INTEGER: 16448
+PGSTAT-MIB::pgstatDatabaseName.11874 = STRING: postgres
+PGSTAT-MIB::pgstatDatabaseName.16448 = STRING: rodrigo
+PGSTAT-MIB::pgstatDatabaseBackends.11874 = Gauge32: 200
+PGSTAT-MIB::pgstatDatabaseBackends.16448 = Gauge32: 10
+PGSTAT-MIB::pgstatDatabaseCommits.11874 = Counter32: 50000
+PGSTAT-MIB::pgstatDatabaseCommits.16448 = Counter32: 25000
+PGSTAT-MIB::pgstatDatabaseRollbacks.11874 = Counter32: 100
+PGSTAT-MIB::pgstatDatabaseRollbacks.16448 = Counter32: 50
+*/
 
 	// row 1
         row = netsnmp_create_table_data_row();
@@ -153,36 +131,19 @@ netsnmp_table_set_add_default_row(table_set, COL5, ASN_OCTET_STR, FALSE, NULL, 0
 	ival = 3000;
 	netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, &ival, sizeof(ival));
 
-/*
-for (i = 1; i <= 2; i++) {
-    for (j = 1; j <= 2; j++) {
-        row = netsnmp_create_table_data_row();
-        netsnmp_table_row_add_index(row, ASN_INTEGER, &i, sizeof(i));
-        //netsnmp_table_row_add_index(row, ASN_INTEGER, &j, sizeof(j));
-        netsnmp_table_dataset_add_row(table_set, row);
+	/*for (i = 1; i <= 2; i++) {
+	    for (j = 1; j <= 2; j++) {
+		row = netsnmp_create_table_data_row();
+		netsnmp_table_row_add_index(row, ASN_INTEGER, &i, sizeof(i));
+		netsnmp_table_row_add_index(row, ASN_INTEGER, &j, sizeof(j));
+		netsnmp_table_dataset_add_row(table_set, row);
 
-        ival = 10 * i + j;
-        netsnmp_set_row_column(row, COL3, ASN_INTEGER, &ival, sizeof(ival));
-        netsnmp_set_row_column(row, COL5, ASN_OCTET_STR, "test", sizeof("test") - 1);
-    }
-}*/
+		ival = 10 * i + j;
+		netsnmp_set_row_column(row, COL3, ASN_INTEGER, &ival, sizeof(ival));
+		netsnmp_set_row_column(row, COL5, ASN_OCTET_STR, "test", sizeof("test") - 1);
+	    }
+	}*/
 
-/*
-    row = netsnmp_create_table_data_row();
-    //netsnmp_table_row_add_index(row, ASN_INTEGER, 15678, 0);
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASENAME, ASN_OCTET_STR, "postgres", strlen("postgres"));
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, 200, 0);
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECOMMITS, ASN_COUNTER, 50000, 0);
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKS, ASN_COUNTER, 50000, 0);
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_OPAQUE, 5, 0);
-    netsnmp_table_dataset_add_row(table_set, row);
-
-    row = netsnmp_create_table_data_row();
-    //netsnmp_table_row_add_index(row, ASN_INTEGER, 32871, 0);
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASENAME, ASN_OCTET_STR, "rodrigo", strlen("rodrigo"));
-    netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, 150, 0);
-    netsnmp_table_dataset_add_row(table_set, row);
-*/
 }
 
 /** Initializes the pgstatDatabaseTable module */
