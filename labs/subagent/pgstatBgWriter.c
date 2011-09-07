@@ -61,12 +61,16 @@ init_pgstatBgWriter(void)
 
 // TODO: put it all on a struct (pgstatBgWriterCache ?)
 static u_long checkpoints_timed = 0;
-/*static u_long checkpoints_req = 0;
+static u_long checkpoints_req = 0;
 static u_long buffers_checkpoint = 0;
 static u_long buffers_clean = 0;
 static u_long maxwritten_clean = 0;
 static u_long buffers_backend = 0;
-static u_long buffers_alloc = 0;*/
+static u_long buffers_alloc = 0;
+
+int rnd(int ceil) {
+	return rand() % ceil + 1;
+}
 
 int
 handle_pgstatBgWriterCheckpointsTimed(netsnmp_mib_handler *handler,
@@ -89,7 +93,7 @@ handle_pgstatBgWriterCheckpointsTimed(netsnmp_mib_handler *handler,
                                      /* the length of the data in bytes */
 					sizeof(checkpoints_timed));
 
-            checkpoints_timed++;
+            checkpoints_timed += rnd(3);
             break;
 
 
@@ -118,9 +122,10 @@ handle_pgstatBgWriterCheckpointsRequested(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & checkpoints_req,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(checkpoints_req));
+            checkpoints_req += rnd(1);
             break;
 
 
@@ -149,11 +154,11 @@ handle_pgstatBgWriterBuffersCheckpoint(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & buffers_checkpoint,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(buffers_checkpoint));
+            buffers_checkpoint += rnd(256);
             break;
-
 
         default:
             /* we should never get here, so this is a really bad error */
@@ -180,11 +185,11 @@ handle_pgstatBgWriterBuffersClean(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & buffers_clean,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(buffers_clean));
+            buffers_clean += rnd(2);
             break;
-
 
         default:
             /* we should never get here, so this is a really bad error */
@@ -211,11 +216,11 @@ handle_pgstatBgWriterMaxWrittenClean(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & maxwritten_clean,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(maxwritten_clean));
+            maxwritten_clean += rnd(1);
             break;
-
 
         default:
             /* we should never get here, so this is a really bad error */
@@ -242,11 +247,11 @@ handle_pgstatBgWriterBuffersBackend(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & buffers_backend,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(buffers_backend));
+            buffers_backend += rnd(512);
             break;
-
 
         default:
             /* we should never get here, so this is a really bad error */
@@ -273,11 +278,11 @@ handle_pgstatBgWriterBuffersAllocated(netsnmp_mib_handler *handler,
         case MODE_GET:
             snmp_set_var_typed_value(requests->requestvb, ASN_INTEGER,
                                      /* a pointer to the scalar's data */
-					(u_char *) & checkpoints_timed,
+					(u_char *) & buffers_alloc,
                                      /* the length of the data in bytes */
-					sizeof(checkpoints_timed));
+					sizeof(buffers_alloc));
+            buffers_alloc += rnd(256);
             break;
-
 
         default:
             /* we should never get here, so this is a really bad error */
