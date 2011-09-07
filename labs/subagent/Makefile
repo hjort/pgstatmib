@@ -6,7 +6,7 @@
 
 CC = gcc
 
-OBJECTS = pgstatmibd.o pgstatBgWriter.o
+OBJECTS = pgstatmibd.o pgstatDatabaseTable.o pgstatBgWriter.o
 TARGETS = pgstatmibd
 
 CFLAGS = -I. `net-snmp-config --cflags`
@@ -17,7 +17,8 @@ BUILDAGENTLIBS = `net-snmp-config --agent-libs`
 NS5SRC = /usr/src/net-snmp-5.7
 
 override CFLAGS := -I$(NS5SRC)/include $(CFLAGS)
-override BUILDAGENTLIBS := -L$(NS5SRC)/agent/.libs -lnetsnmpmibs -lnetsnmpagent -lnetsnmphelpers -L$(NS5SRC)/snmplib/.libs -lnetsnmp $(BUILDAGENTLIBS)
+override BUILDAGENTLIBS := -L$(NS5SRC)/agent/.libs -lnetsnmpmibs -lnetsnmpagent -lnetsnmphelpers \
+	-L$(NS5SRC)/snmplib/.libs -lnetsnmp $(BUILDAGENTLIBS)
 
 # shared library flags (assumes gcc)
 DLFLAGS = -fPIC -shared

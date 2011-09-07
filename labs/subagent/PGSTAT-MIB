@@ -24,7 +24,7 @@ pgStatMIB 	OBJECT IDENTIFIER ::= { pgsql 3 }
 
 ----------------------------------------------------------------
 
-pgstatDatabase OBJECT-TYPE
+pgstatDatabaseTable OBJECT-TYPE
     SYNTAX     SEQUENCE OF PgStatDatabaseEntry
     MAX-ACCESS not-accessible
     STATUS     current
@@ -41,7 +41,7 @@ pgstatDatabaseEntry OBJECT-TYPE
         host.  As an example, an instance of the hrDeviceType
         object might be named hrDeviceType.3"
     INDEX { pgstatDatabaseIndex }
-    ::= { pgstatDatabase 1 }
+    ::= { pgstatDatabaseTable 1 }
 
 PgStatDatabaseEntry ::= SEQUENCE {
 	pgstatDatabaseIndex		Integer32,

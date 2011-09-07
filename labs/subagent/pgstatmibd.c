@@ -3,6 +3,7 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include <signal.h>
 
+#include <pgstatDatabaseTable.h>
 #include <pgstatBgWriter.h>
 
 static int keep_running;
@@ -43,8 +44,9 @@ main (int argc, char **argv) {
 
   /* initialize mib code here */
 
-  /* mib code: init_nstAgentSubagentObject from nstAgentSubagentObject.C */
-  init_pgstatBgWriter();  
+  /* mib code */
+  init_pgstatDatabaseTable();
+  init_pgstatBgWriter();
 
   /* initialize vacm/usm access control  */
   /*if (!agentx_subagent) {
