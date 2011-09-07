@@ -2,7 +2,7 @@ PGSTAT-MIB DEFINITIONS ::= BEGIN
 
 IMPORTS
 	MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE,
-	Counter32, Gauge32, Integer32, enterprises
+	Counter32, Gauge32, Integer32, Unsigned32, enterprises
 		FROM SNMPv2-SMI
 	Float
 		FROM UCD-SNMP-MIB
@@ -40,11 +40,11 @@ pgstatDatabaseEntry OBJECT-TYPE
         "TODO: A (conceptual) entry for one device contained by the
         host.  As an example, an instance of the hrDeviceType
         object might be named hrDeviceType.3"
-    INDEX { pgstatDatabaseIndex }
+    INDEX { pgstatDatabaseId }
     ::= { pgstatDatabaseTable 1 }
 
 PgStatDatabaseEntry ::= SEQUENCE {
-	pgstatDatabaseIndex		Integer32,
+	pgstatDatabaseId		Integer32,
 	pgstatDatabaseName		DisplayString,
 	pgstatDatabaseBackends		Gauge32,
 	pgstatDatabaseCommits		Counter32,
@@ -56,12 +56,12 @@ PgStatDatabaseEntry ::= SEQUENCE {
 	pgstatDatabaseTuplesInserted	Counter32,
 	pgstatDatabaseTuplesUpdated	Counter32,
 	pgstatDatabaseTuplesDeleted	Counter32,
-	pgstatDatabaseRollbackRatio	Float,
-	pgstatDatabaseCacheHitRatio	Float,
+	pgstatDatabaseRollbackRatio	Integer32,
+	pgstatDatabaseCacheHitRatio	Integer32,
 	pgstatDatabaseTuplesModified	Counter32
     }
 
-pgstatDatabaseIndex OBJECT-TYPE
+pgstatDatabaseId OBJECT-TYPE
     SYNTAX     Integer32 (1..2147483647)
     MAX-ACCESS read-only
     STATUS     current
@@ -199,7 +199,7 @@ pgstatDatabaseTuplesDeleted OBJECT-TYPE
     ::= { pgstatDatabaseEntry 12 }
 
 pgstatDatabaseRollbackRatio OBJECT-TYPE
-    SYNTAX     Float
+    SYNTAX     Unsigned32 (0..10000)
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
@@ -207,7 +207,7 @@ pgstatDatabaseRollbackRatio OBJECT-TYPE
     ::= { pgstatDatabaseEntry 21 }
 
 pgstatDatabaseCacheHitRatio OBJECT-TYPE
-    SYNTAX     Float
+    SYNTAX     Unsigned32 (0..10000)
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION

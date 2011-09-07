@@ -11,7 +11,7 @@ void initialize_table_pgstatDatabaseTable(void);
 Netsnmp_Node_Handler pgstatDatabaseTable_handler;
 
 /* column number definitions for table pgstatDatabaseTable */
-       #define COLUMN_PGSTATDATABASEINDEX		1
+       #define COLUMN_PGSTATDATABASEID		1
        #define COLUMN_PGSTATDATABASENAME		2
        #define COLUMN_PGSTATDATABASEBACKENDS		3
        #define COLUMN_PGSTATDATABASECOMMITS		4

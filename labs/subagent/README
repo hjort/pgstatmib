@@ -20,3 +20,4 @@ snmpwalk localhost 1.3.6.1.4.1.27645.3
 export MIBDIRS="+." MIBS=ALL
 snmpwalk localhost pgStatMIB
 
+snmptranslate -M+. -mPGSTAT-MIB -Tp -IR pgStatMIB
