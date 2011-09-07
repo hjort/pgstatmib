@@ -1,0 +1,87 @@
+PGSTAT-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+	MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE,
+	Counter32, Gauge32, Integer32, enterprises
+		FROM SNMPv2-SMI
+	Float
+		FROM UCD-SNMP-MIB
+	DisplayString, DateAndTime, TruthValue
+		FROM SNMPv2-TC;
+
+pgsql MODULE-IDENTITY
+	LAST-UPDATED "201109062145Z"	-- 06 September 2011
+	ORGANIZATION "pgstatmib Development Team"
+	CONTACT-INFO
+		"E-mail: pgstatmib-devel@pgfoundry.org
+		WWW: http://pgstatmib.projects.postgresql.org"
+	DESCRIPTION
+		"MIB to describe PostgreSQL statistics"
+
+	::= { enterprises 27645 }
+
+pgStatMIB 	OBJECT IDENTIFIER ::= { pgsql 3 }
+
+----------------------------------------------------------------
+
+pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 10 }
+
+pgstatBgWriterCheckpointsTimed OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"checkpoints_timed: number of scheduled checkpoints"
+	::= { pgstatBgWriter 1 }
+
+pgstatBgWriterCheckpointsRequested OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"checkpoints_req: number of requested checkpoints"
+	::= { pgstatBgWriter 2 }
+
+pgstatBgWriterBuffersCheckpoint OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"buffers_checkpoint: buffers written by checkpoints"
+	::= { pgstatBgWriter 3 }
+
+pgstatBgWriterBuffersClean OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"buffers_clean: buffers written by cleaning scans"
+	::= { pgstatBgWriter 4 }
+
+pgstatBgWriterMaxWrittenClean OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"maxwritten_clean: the number of times the background writer stopped a cleaning scan because it had written too many buffers"
+	::= { pgstatBgWriter 5 }
+
+pgstatBgWriterBuffersBackend OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"buffers_backend: buffers written by backends (that is, not by the background writer)"
+	::= { pgstatBgWriter 6 }
+
+pgstatBgWriterBuffersAllocated OBJECT-TYPE
+	SYNTAX		INTEGER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"buffers_alloc: total buffers allocated"
+	::= { pgstatBgWriter 7 }
+
+---------------------------------------
+
+END

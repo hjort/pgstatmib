@@ -1,0 +1,10 @@
+curdir="$PWD"
+
+cd /usr/src/net-snmp-5.7/local/
+
+MIBDIRS="+$curdir" MIBS=ALL ./mib2c pgstatBgWriter
+
+mv pgstat* $curdir
+
+cd -
+

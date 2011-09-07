@@ -3,3 +3,8 @@ http://www.net-snmp.org/wiki/index.php/TUT:Writing_a_Subagent
 sudo ./example-demon &
 
 snmpget -v1 -cpublic localhost netSnmp.2.4.1.1.2.0
+export LD_LIBRARY_PATH=/usr/src/net-snmp-5.7/agent/.libs/:/usr/src/net-snmp-5.7/snmplib/.libs/
+snmptranslate -M+. -mPGSTAT-MIB -Tp -IR pgStatMIB
+MIBDIRS=. MIBS=PGSTAT-MIB snmptranslate -M+. -Tp -IR pgsql
+MIBDIRS=+. MIBS=ALL /usr/src/net-snmp-5.7/local/mib2c -c /usr/src/net-snmp-5.7/local/mib2c.conf pgStatMIB
+snmpwalk localhost 1.3.6.1.4.1.27645.3
