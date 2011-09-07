@@ -6,7 +6,7 @@ pgStatMIB ::= { iso(1) org(3) dod(6) internet(1) private(4) enterprises(1) pgsql
 enterprises.pgsql.pgStatMIB => 1.3.6.1.4.1.27645.3
 
 
-Scalars and Tables Mapped so Far
+Tables and Scalars Mapped so Far
 --------------------------------
 
 enterprises.pgsql (1.3.6.1.4.1.27645)
@@ -52,17 +52,30 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
       +-- -R-- INTEGER   pgstatBgWriterBuffersAllocated(7)
 
 
-Usage Sample
-------------
+Usage Samples
+-------------
+
+$ snmpwalk localhost pgstatDatabase
+PGSTAT-MIB::pgstatDatabaseName.1 = STRING: postgres
+PGSTAT-MIB::pgstatDatabaseName.2 = STRING: rodrigo
+PGSTAT-MIB::pgstatDatabaseBackends.1 = Gauge32: 200
+PGSTAT-MIB::pgstatDatabaseBackends.2 = Gauge32: 10
+PGSTAT-MIB::pgstatDatabaseCommits.1 = Counter32: 50000
+PGSTAT-MIB::pgstatDatabaseCommits.2 = Counter32: 25000
+PGSTAT-MIB::pgstatDatabaseRollbacks.1 = Counter32: 100
+PGSTAT-MIB::pgstatDatabaseRollbacks.2 = Counter32: 50
 
 $ snmpwalk localhost pgstatBgWriter
-PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 24
-PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 25
-PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 25
-PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 25
-PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 25
-PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 25
-PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 25
+PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 1
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 181
+PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 2
+PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 1
+PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 217
+PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 2
+
+$ snmpgetnext localhost pgstatBgWriterBuffersCheckpoint
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 567
 
 
 Expected Sub-Entries
