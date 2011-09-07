@@ -24,6 +24,206 @@ pgStatMIB 	OBJECT IDENTIFIER ::= { pgsql 3 }
 
 ----------------------------------------------------------------
 
+pgstatDatabase OBJECT-TYPE
+    SYNTAX     SEQUENCE OF PgStatDatabaseEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "TODO: The (conceptual) table of devices contained by the host."
+    ::= { pgStatMIB 1 }
+
+pgstatDatabaseEntry OBJECT-TYPE
+    SYNTAX     PgStatDatabaseEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "TODO: A (conceptual) entry for one device contained by the
+        host.  As an example, an instance of the hrDeviceType
+        object might be named hrDeviceType.3"
+    INDEX { pgstatDatabaseIndex }
+    ::= { pgstatDatabase 1 }
+
+PgStatDatabaseEntry ::= SEQUENCE {
+	pgstatDatabaseIndex		Integer32,
+	pgstatDatabaseName		DisplayString,
+	pgstatDatabaseBackends		Gauge32,
+	pgstatDatabaseCommits		Counter32,
+	pgstatDatabaseRollbacks		Counter32,
+	pgstatDatabaseBlocksRead	Counter32,
+	pgstatDatabaseBlocksHit		Counter32,
+	pgstatDatabaseTuplesReturned	Counter32,
+	pgstatDatabaseTuplesFetched	Counter32,
+	pgstatDatabaseTuplesInserted	Counter32,
+	pgstatDatabaseTuplesUpdated	Counter32,
+	pgstatDatabaseTuplesDeleted	Counter32,
+	pgstatDatabaseRollbackRatio	Float,
+	pgstatDatabaseCacheHitRatio	Float,
+	pgstatDatabaseTuplesModified	Counter32
+    }
+
+pgstatDatabaseIndex OBJECT-TYPE
+    SYNTAX     Integer32 (1..2147483647)
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: A unique value for each device contained by the host.
+        The value for each device must remain constant at
+        least from one re-initialization of the agent to the
+        next re-initialization."
+    ::= { pgstatDatabaseEntry 1 }
+
+pgstatDatabaseName OBJECT-TYPE
+    SYNTAX     DisplayString (SIZE (0..64))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: An indication of the type of device."
+    ::= { pgstatDatabaseEntry 2 }
+
+pgstatDatabaseBackends OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: A textual description of this device, including the
+        device's manufacturer and revision, and optionally,
+        its serial number."
+    ::= { pgstatDatabaseEntry 3 }
+
+pgstatDatabaseCommits OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The product ID for this device."
+    ::= { pgstatDatabaseEntry 4 }
+
+pgstatDatabaseRollbacks OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The current operational state of the device described
+        by this row of the table."
+    ::= { pgstatDatabaseEntry 5 }
+
+pgstatDatabaseBlocksRead OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 6 }
+
+pgstatDatabaseBlocksHit OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 7 }
+
+pgstatDatabaseTuplesReturned OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 8 }
+
+pgstatDatabaseTuplesFetched OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 9 }
+
+pgstatDatabaseTuplesInserted OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 10 }
+
+pgstatDatabaseTuplesUpdated OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 11 }
+
+pgstatDatabaseTuplesDeleted OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: The number of errors detected on this device.  It
+        should be noted that as this object has a SYNTAX of
+        Counter32, that it does not have a defined initial
+        value.  However, it is recommended that this object be
+        initialized to zero, even though management stations
+        must not depend on such an initialization."
+    ::= { pgstatDatabaseEntry 12 }
+
+pgstatDatabaseRollbackRatio OBJECT-TYPE
+    SYNTAX     Float
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: ..."
+    ::= { pgstatDatabaseEntry 21 }
+
+pgstatDatabaseCacheHitRatio OBJECT-TYPE
+    SYNTAX     Float
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: ..."
+    ::= { pgstatDatabaseEntry 22 }
+
+pgstatDatabaseTuplesModified OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: ..."
+    ::= { pgstatDatabaseEntry 23 }
+
+----------------------------------------------------------------
+
 pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 10 }
 
 pgstatBgWriterCheckpointsTimed OBJECT-TYPE
