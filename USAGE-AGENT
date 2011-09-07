@@ -1,0 +1,9 @@
+sudo su
+service snmpd restart
+
+NS5SRC=/usr/src/net-snmp-5.7
+PG9SRC=/usr/src/postgresql-9.0.0
+
+export LD_LIBRARY_PATH=$NS5SRC/agent/.libs/:$NS5SRC/snmplib/.libs/:$PG9SRC/src/interfaces/libpq/
+
+./pgstatmibd
