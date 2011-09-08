@@ -7,8 +7,8 @@ SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
 
 SELECT datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit,
 	tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted,
-	trunc(xact_rollback::numeric / (xact_commit + xact_rollback) * 100, 4) as rollback_ratio,
-	trunc(blks_hit::numeric / (blks_hit + blks_read) * 100, 4) as cache_hit_ratio,
+	(xact_rollback::numeric / (xact_commit + xact_rollback + 1e-5) * 1e4)::int as rollback_ratio,
+	(blks_hit::numeric / (blks_hit + blks_read + 1e-5) * 1e4)::int as cache_hit_ratio,
 	(tup_inserted + tup_updated + tup_deleted) as tup_modified
 FROM pg_stat_database
 WHERE datname !~ '^template'
