@@ -1,0 +1,64 @@
+$ snmpwalk localhost pgstat
+PGSTAT-MIB::pgstatDatabaseId.11874 = INTEGER: 11874
+PGSTAT-MIB::pgstatDatabaseId.16384 = INTEGER: 16384
+PGSTAT-MIB::pgstatDatabaseId.16448 = INTEGER: 16448
+PGSTAT-MIB::pgstatDatabaseName.11874 = STRING: postgres
+PGSTAT-MIB::pgstatDatabaseName.16384 = STRING: pgbench
+PGSTAT-MIB::pgstatDatabaseName.16448 = STRING: rodrigo
+PGSTAT-MIB::pgstatDatabaseBackends.11874 = Gauge32: 1
+PGSTAT-MIB::pgstatDatabaseBackends.16384 = Gauge32: 0
+PGSTAT-MIB::pgstatDatabaseBackends.16448 = Gauge32: 1
+PGSTAT-MIB::pgstatDatabaseCommits.11874 = Counter32: 410
+PGSTAT-MIB::pgstatDatabaseCommits.16384 = Counter32: 98
+PGSTAT-MIB::pgstatDatabaseCommits.16448 = Counter32: 32631
+PGSTAT-MIB::pgstatDatabaseRollbacks.11874 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseRollbacks.16384 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseRollbacks.16448 = Counter32: 7
+PGSTAT-MIB::pgstatDatabaseRollbackRatio.11874 = Gauge32: 0
+PGSTAT-MIB::pgstatDatabaseRollbackRatio.16384 = Gauge32: 0
+PGSTAT-MIB::pgstatDatabaseRollbackRatio.16448 = Gauge32: 2
+PGSTAT-MIB::pgstatDatabaseCacheHitRatio.11874 = Gauge32: 9867
+PGSTAT-MIB::pgstatDatabaseCacheHitRatio.16384 = Gauge32: 5856
+PGSTAT-MIB::pgstatDatabaseCacheHitRatio.16448 = Gauge32: 9839
+PGSTAT-MIB::pgstatDatabaseTuplesModified.11874 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseTuplesModified.16384 = Counter32: 100247
+PGSTAT-MIB::pgstatDatabaseTuplesModified.16448 = Counter32: 228671
+PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 42
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 4259
+PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 10843
+PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 3480
+
+$ snmptable localhost -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 80 pgstatDatabaseTable
+SNMP table: PGSTAT-MIB::pgstatDatabaseTable
+
+Id              Name            Backends        Commits         Rollbacks       
+BlocksRead      BlocksHit       TuplesReturned  TuplesFetched   TuplesInserted  
+TuplesUpdated   TuplesDeleted   RollbackRatio   CacheHitRatio   TuplesModified  
+
+index: [11874]
+11874           postgres        1               410             0               
+?               ?               ?               ?               ?               
+?               ?               0               9867            0               
+
+index: [16384]
+16384           pgbench         0               98              0               
+?               ?               ?               ?               ?               
+?               ?               0               5856            100247          
+
+index: [16448]
+16448           rodrigo         1               32631           7               
+?               ?               ?               ?               ?               
+?               ?               2               9839            228671          
+
+$ snmpwalk localhost pgstatBgWriter
+PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 43
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 4259
+PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 0
+PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 10843
+PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 3480
+
