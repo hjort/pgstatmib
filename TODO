@@ -1,0 +1,6 @@
+TODO list:
+- improve exception handling
+- receive arguments on startup (using getopt)
+- implement caches when retrieving values from DB (default timeout: 30s)
+- make all scalar and table objects read only
+- remove unecessary handlers on SNMP tables
