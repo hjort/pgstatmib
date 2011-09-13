@@ -10,19 +10,22 @@ GCC = yes
 OBJECTS = pgstatmibd.o pgstatDatabaseTable.o pgstatBgWriter.o
 TARGETS = pgstatmibd
 
+# TODO: use PG's pg_config
+
 CFLAGS = -I. `net-snmp-config --cflags`
 BUILDLIBS = `net-snmp-config --libs`
 BUILDAGENTLIBS = `net-snmp-config --agent-libs`
 
 # Net-SNMP 5.7 sources
-NS5SRC = /usr/src/net-snmp-5.7
+NS_SRC = /usr/src/net-snmp-5.7
 
 # PostgreSQL 9.0 sources
-PG9SRC = /usr/src/postgresql-9.0.0/src
+PG_SRC = /usr/src/postgresql-8.3.8/src
+#PG_SRC = /usr/src/postgresql-9.0.0/src
 
-override CFLAGS := -I$(NS5SRC)/include $(CFLAGS)
-override BUILDAGENTLIBS := -L$(NS5SRC)/agent/.libs -lnetsnmpmibs -lnetsnmpagent -lnetsnmphelpers \
-	-L$(NS5SRC)/snmplib/.libs -lnetsnmp $(BUILDAGENTLIBS)
+#override CFLAGS := -I$(NS_SRC)/include $(CFLAGS)
+#override BUILDAGENTLIBS := -L$(NS_SRC)/agent/.libs -lnetsnmpmibs -lnetsnmpagent -lnetsnmphelpers \
+#	-L$(NS_SRC)/snmplib/.libs -lnetsnmp $(BUILDAGENTLIBS)
 
 # shared library flags (assumes gcc)
 DLFLAGS = -fPIC -shared
@@ -30,10 +33,10 @@ DLFLAGS = -fPIC -shared
 CFLAGS += -O2 -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -fno-strict-aliasing -fwrapv
 
 #CPPFLAGS += -I/usr/local/pgsql/include
-CPPFLAGS += -I$(PG9SRC)/interfaces/libpq -I$(PG9SRC)/include
+CPPFLAGS += -I$(PG_SRC)/interfaces/libpq -I$(PG_SRC)/include
 
 #LDLIBS += -L/usr/local/pgsql/lib -lpq
-LDLIBS += -L$(PG9SRC)/interfaces/libpq -lpq
+LDLIBS += -L$(PG_SRC)/interfaces/libpq -lpq
 
 all: $(TARGETS)
 
