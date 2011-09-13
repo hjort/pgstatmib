@@ -83,7 +83,7 @@ void refreshNumbers() {
 /**
  * load from database
  */
-void loadNumbersFromDB() {
+void loadNumbersFromDB(void) {
 	PGresult *res;
 
 	res = PQexec(dbconn, "\

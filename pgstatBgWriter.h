@@ -14,5 +14,6 @@ Netsnmp_Node_Handler handle_pgstatBgWriterBuffersClean;
 Netsnmp_Node_Handler handle_pgstatBgWriterMaxWrittenClean;
 Netsnmp_Node_Handler handle_pgstatBgWriterBuffersBackend;
 Netsnmp_Node_Handler handle_pgstatBgWriterBuffersAllocated;
+void loadNumbersFromDB(void);
 
 #endif /* PGSTATBGWRITER_H */
