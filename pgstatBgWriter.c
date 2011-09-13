@@ -65,14 +65,14 @@ static u_long maxwritten_clean = 0;
 static u_long buffers_backend = 0;
 static u_long buffers_alloc = 0;
 
-int rnd(int ceil) {
+/*int rnd(int ceil) {
 	return rand() % ceil + 1;
-}
+}*/
 
 /**
  * refresh numbers
  */
-void refreshNumbers() {
+void refreshNumbers(void) {
 
 	// TODO: cache these numbers to prevent going to database so frequently
 	// ...
