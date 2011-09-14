@@ -21,37 +21,37 @@ init_pgstatBgWriter(void)
 
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterCheckpointsTimed", handle_pgstatBgWriterCheckpointsTimed,
-                               pgstatBgWriterCheckpointsTimed_oid, OID_LENGTH(pgstatBgWriterCheckpointsTimed_oid),
+                               (oid *) pgstatBgWriterCheckpointsTimed_oid, OID_LENGTH(pgstatBgWriterCheckpointsTimed_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterCheckpointsRequested", handle_pgstatBgWriterCheckpointsRequested,
-                               pgstatBgWriterCheckpointsRequested_oid, OID_LENGTH(pgstatBgWriterCheckpointsRequested_oid),
+                               (oid *) pgstatBgWriterCheckpointsRequested_oid, OID_LENGTH(pgstatBgWriterCheckpointsRequested_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterBuffersCheckpoint", handle_pgstatBgWriterBuffersCheckpoint,
-                               pgstatBgWriterBuffersCheckpoint_oid, OID_LENGTH(pgstatBgWriterBuffersCheckpoint_oid),
+                               (oid *) pgstatBgWriterBuffersCheckpoint_oid, OID_LENGTH(pgstatBgWriterBuffersCheckpoint_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterBuffersClean", handle_pgstatBgWriterBuffersClean,
-                               pgstatBgWriterBuffersClean_oid, OID_LENGTH(pgstatBgWriterBuffersClean_oid),
+                               (oid *) pgstatBgWriterBuffersClean_oid, OID_LENGTH(pgstatBgWriterBuffersClean_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterMaxWrittenClean", handle_pgstatBgWriterMaxWrittenClean,
-                               pgstatBgWriterMaxWrittenClean_oid, OID_LENGTH(pgstatBgWriterMaxWrittenClean_oid),
+                               (oid *) pgstatBgWriterMaxWrittenClean_oid, OID_LENGTH(pgstatBgWriterMaxWrittenClean_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterBuffersBackend", handle_pgstatBgWriterBuffersBackend,
-                               pgstatBgWriterBuffersBackend_oid, OID_LENGTH(pgstatBgWriterBuffersBackend_oid),
+                               (oid *) pgstatBgWriterBuffersBackend_oid, OID_LENGTH(pgstatBgWriterBuffersBackend_oid),
                                HANDLER_CAN_RONLY
         ));
     netsnmp_register_scalar(
         netsnmp_create_handler_registration("pgstatBgWriterBuffersAllocated", handle_pgstatBgWriterBuffersAllocated,
-                               pgstatBgWriterBuffersAllocated_oid, OID_LENGTH(pgstatBgWriterBuffersAllocated_oid),
+                               (oid *) pgstatBgWriterBuffersAllocated_oid, OID_LENGTH(pgstatBgWriterBuffersAllocated_oid),
                                HANDLER_CAN_RONLY
         ));
 }

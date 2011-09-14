@@ -71,7 +71,7 @@ netsnmp_table_set_add_default_row(table_set, COL5, ASN_OCTET_STR, FALSE, NULL, 0
     /* note: if you don't need a subhandler to deal with any aspects
        of the request, change pgstatDatabaseTable_handler to "NULL" */
     netsnmp_register_table_data_set(netsnmp_create_handler_registration("pgstatDatabaseTable", pgstatDatabaseTable_handler,
-                                                        pgstatDatabaseTable_oid,
+                                                        (oid *) pgstatDatabaseTable_oid,
                                                         OID_LENGTH(pgstatDatabaseTable_oid),
                                                         HANDLER_CAN_RWRITE),
                             table_set, NULL);
@@ -119,49 +119,49 @@ ORDER BY datid");
 		datid = atoi(PQgetvalue(res, i, 0));
 		netsnmp_table_row_add_index(row, ASN_INTEGER, &datid, sizeof(datid));
 		netsnmp_table_dataset_add_row(table_set, row);
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEID, ASN_INTEGER, &datid, sizeof(datid));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEID, ASN_INTEGER, (char *) &datid, sizeof(datid));
 
 		datname = PQgetvalue(res, i, 1);
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASENAME, ASN_OCTET_STR, datname, strlen(datname));
 
 		numbackends = atoi(PQgetvalue(res, i, 2));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, &numbackends, sizeof(numbackends));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBACKENDS, ASN_GAUGE, (char *) &numbackends, sizeof(numbackends));
 
 		xact_commit = atoi(PQgetvalue(res, i, 3));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECOMMITS, ASN_COUNTER, &xact_commit, sizeof(xact_commit));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECOMMITS, ASN_COUNTER, (char *) &xact_commit, sizeof(xact_commit));
 
 		xact_rollback = atoi(PQgetvalue(res, i, 4));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKS, ASN_COUNTER, &xact_rollback, sizeof(xact_rollback));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKS, ASN_COUNTER, (char *) &xact_rollback, sizeof(xact_rollback));
 
 		blks_read = atoi(PQgetvalue(res, i, 5));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBLOCKSREAD, ASN_COUNTER, &blks_read, sizeof(blks_read));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBLOCKSREAD, ASN_COUNTER, (char *) &blks_read, sizeof(blks_read));
 
 		blks_hit = atoi(PQgetvalue(res, i, 6));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBLOCKSHIT, ASN_COUNTER, &blks_hit, sizeof(blks_hit));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEBLOCKSHIT, ASN_COUNTER, (char *) &blks_hit, sizeof(blks_hit));
 
 		tup_returned = atoi(PQgetvalue(res, i, 7));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESRETURNED, ASN_COUNTER, &tup_returned, sizeof(tup_returned));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESRETURNED, ASN_COUNTER, (char *) &tup_returned, sizeof(tup_returned));
 
 		tup_fetched = atoi(PQgetvalue(res, i, 8));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESFETCHED, ASN_COUNTER, &tup_fetched, sizeof(tup_fetched));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESFETCHED, ASN_COUNTER, (char *) &tup_fetched, sizeof(tup_fetched));
 
 		tup_inserted = atoi(PQgetvalue(res, i, 9));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, &tup_inserted, sizeof(tup_inserted));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, (char *) &tup_inserted, sizeof(tup_inserted));
 
 		tup_updated = atoi(PQgetvalue(res, i, 10));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, &tup_updated, sizeof(tup_updated));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, (char *) &tup_updated, sizeof(tup_updated));
 
 		tup_deleted = atoi(PQgetvalue(res, i, 11));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, &tup_deleted, sizeof(tup_deleted));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, (char *) &tup_deleted, sizeof(tup_deleted));
 
 		rollback_ratio = atoi(PQgetvalue(res, i, 12));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, &rollback_ratio, sizeof(rollback_ratio));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, (char *) &rollback_ratio, sizeof(rollback_ratio));
 
 		cache_hit_ratio = atoi(PQgetvalue(res, i, 13));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, &cache_hit_ratio, sizeof(cache_hit_ratio));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, (char *) &cache_hit_ratio, sizeof(cache_hit_ratio));
 
 		tup_modified = atoi(PQgetvalue(res, i, 14));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, &tup_modified, sizeof(tup_modified));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, (char *) &tup_modified, sizeof(tup_modified));
 	}
 
 	PQclear(res);

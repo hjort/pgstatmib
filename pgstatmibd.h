@@ -26,4 +26,7 @@
 //extern 
 PGconn *dbconn;
 
+RETSIGTYPE
+stop_server(int);
+
 #endif
