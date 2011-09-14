@@ -204,7 +204,7 @@ pgstatDatabaseRollbackRatio OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "TODO: ..."
-    ::= { pgstatDatabaseEntry 21 }
+    ::= { pgstatDatabaseEntry 13 }
 
 pgstatDatabaseCacheHitRatio OBJECT-TYPE
     SYNTAX     Unsigned32 (0..10000)
@@ -212,7 +212,7 @@ pgstatDatabaseCacheHitRatio OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "TODO: ..."
-    ::= { pgstatDatabaseEntry 22 }
+    ::= { pgstatDatabaseEntry 14 }
 
 pgstatDatabaseTuplesModified OBJECT-TYPE
     SYNTAX     Counter32
@@ -220,7 +220,7 @@ pgstatDatabaseTuplesModified OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "TODO: ..."
-    ::= { pgstatDatabaseEntry 23 }
+    ::= { pgstatDatabaseEntry 15 }
 
 ----------------------------------------------------------------
 
