@@ -227,7 +227,7 @@ pgstatDatabaseTuplesModified OBJECT-TYPE
 pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 10 }
 
 pgstatBgWriterCheckpointsTimed OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -235,7 +235,7 @@ pgstatBgWriterCheckpointsTimed OBJECT-TYPE
 	::= { pgstatBgWriter 1 }
 
 pgstatBgWriterCheckpointsRequested OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -243,7 +243,7 @@ pgstatBgWriterCheckpointsRequested OBJECT-TYPE
 	::= { pgstatBgWriter 2 }
 
 pgstatBgWriterBuffersCheckpoint OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -251,7 +251,7 @@ pgstatBgWriterBuffersCheckpoint OBJECT-TYPE
 	::= { pgstatBgWriter 3 }
 
 pgstatBgWriterBuffersClean OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -259,7 +259,7 @@ pgstatBgWriterBuffersClean OBJECT-TYPE
 	::= { pgstatBgWriter 4 }
 
 pgstatBgWriterMaxWrittenClean OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -267,7 +267,7 @@ pgstatBgWriterMaxWrittenClean OBJECT-TYPE
 	::= { pgstatBgWriter 5 }
 
 pgstatBgWriterBuffersBackend OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
@@ -275,7 +275,7 @@ pgstatBgWriterBuffersBackend OBJECT-TYPE
 	::= { pgstatBgWriter 6 }
 
 pgstatBgWriterBuffersAllocated OBJECT-TYPE
-	SYNTAX		INTEGER
+	SYNTAX		Counter32
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION

@@ -46,3 +46,8 @@ pgstatmibd: $(OBJECTS)
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
+start-agent:
+	sudo ./pgstatmibd
+
+test-client:
+	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgStatMIB

@@ -1,6 +1,6 @@
 TODO list:
 - improve exception handling
 - receive arguments on startup (using getopt)
-- implement caches when retrieving values from DB (default timeout: 30s)
-- make all scalar and table objects read only
+- implement caches when retrieving values from DB (see: man netsnmp_cache_handler)
+- make all scalar and table objects read only (use MIB group creation example)
 - remove unecessary handlers on SNMP tables

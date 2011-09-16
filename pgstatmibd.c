@@ -15,7 +15,8 @@ stop_server(int a) {
     keep_running = 0;
 }
 
-//static PGconn *dbconn; // connection to PostgreSQL database
+// connection to PostgreSQL database
+//static PGconn *dbconn;
 
 int
 main (int argc, char **argv) {
