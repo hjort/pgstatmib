@@ -31,4 +31,7 @@ clean:
 
 test:
 	snmpwalk localhost enterprises.2021.254
+	snmpgetnext localhost ucdavis.254.5
 
+stress:
+	for i in `seq 1 3`; do date; snmpget localhost ucdavis.254.5.0; done

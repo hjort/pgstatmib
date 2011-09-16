@@ -40,6 +40,10 @@
 int             example_int = 42;
 char            example_str[EXAMPLE_STR_LEN];
 
+// RH (15/09/2011)
+static long long_counter = 42;
+// ...
+
         /*
          * Forward declarations for the config handlers 
          */
@@ -376,7 +380,14 @@ var_example(struct variable *vp,
         return (u_char *) & long_ret;
 
     case EXAMPLECOUNTER:
-        long_ret = 42;
+
+		// RH (15/09/2011)
+		long_ret = long_counter;
+		long_counter += 42;
+    	printf("example counter: %d\n", (int) long_ret);
+        //long_ret = 42;
+		// ...
+
         return (u_char *) & long_ret;
 
     case EXAMPLEGAUGE:
