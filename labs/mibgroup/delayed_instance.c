@@ -40,6 +40,8 @@ init_delayed_instance(void)
      */
     netsnmp_handler_registration *my_test;
 
+	printf("init_delayed_instance()\n");
+
     my_test =
         netsnmp_create_handler_registration("delayed_instance_example",
                                             delayed_instance_handler,
@@ -61,6 +63,8 @@ delayed_instance_handler(netsnmp_mib_handler *handler,
 
     DEBUGMSGTL(("delayed_instance", "Got request, mode = %d:\n",
                 reqinfo->mode));
+
+	printf("delayed_instance_handler(%d)\n", reqinfo->mode);
 
     switch (reqinfo->mode) {
         /*
@@ -120,6 +124,8 @@ return_delayed_response(unsigned int clientreg, void *clientarg)
     netsnmp_request_info *requests;
     netsnmp_agent_request_info *reqinfo;
     u_long         *delay_time_cache = NULL;
+
+	printf("return_delayed_response(%d)\n", clientreg);
 
     /*
      * here we double check that the cache we created earlier is still

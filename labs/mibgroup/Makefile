@@ -9,7 +9,7 @@
 
 CC = gcc
 
-OBJECTS = example-demon.o example.o
+OBJECTS = example-demon.o example.o delayed_instance.o
 TARGETS = example-demon
 
 CFLAGS = -I. `net-snmp-config --cflags`
@@ -29,9 +29,12 @@ example-demon: $(OBJECTS)
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
-test:
+test-example:
 	snmpwalk localhost enterprises.2021.254
 	snmpgetnext localhost ucdavis.254.5
 
 stress:
 	for i in `seq 1 3`; do date; snmpget localhost ucdavis.254.5.0; done
+
+test-delayed:
+	snmpget localhost 1.3.6.1.4.1.8072.2.1.2.0
