@@ -28,14 +28,7 @@ init_pgstatBgWriter(void)
     REGISTER_MIB(PGSTATBGWRITER_NAME, pgstatBgWriter_vars, variable1, pgstatBgWriter_oid);
 }
 
-// TODO: put it all on a struct (pgstatBgWriterCache ?)
-static u_long checkpoints_timed = 0;
-static u_long checkpoints_req = 0;
-static u_long buffers_checkpoint = 0;
-static u_long buffers_clean = 0;
-static u_long maxwritten_clean = 0;
-static u_long buffers_backend = 0;
-static u_long buffers_alloc = 0;
+static pgstatBgWriterData data;
 
 /**
  * refresh numbers
@@ -71,13 +64,13 @@ FROM pg_stat_bgwriter");
 		//exit_nicely(conn);
 	}
 
-	checkpoints_timed = atoi(PQgetvalue(res, 0, 0));
-	checkpoints_req = atoi(PQgetvalue(res, 0, 1));
-	buffers_checkpoint = atoi(PQgetvalue(res, 0, 2));
-	buffers_clean = atoi(PQgetvalue(res, 0, 3));
-	maxwritten_clean = atoi(PQgetvalue(res, 0, 4));
-	buffers_backend = atoi(PQgetvalue(res, 0, 5));
-	buffers_alloc = atoi(PQgetvalue(res, 0, 6));
+	data.checkpoints_timed = atoi(PQgetvalue(res, 0, 0));
+	data.checkpoints_req = atoi(PQgetvalue(res, 0, 1));
+	data.buffers_checkpoint = atoi(PQgetvalue(res, 0, 2));
+	data.buffers_clean = atoi(PQgetvalue(res, 0, 3));
+	data.maxwritten_clean = atoi(PQgetvalue(res, 0, 4));
+	data.buffers_backend = atoi(PQgetvalue(res, 0, 5));
+	data.buffers_alloc = atoi(PQgetvalue(res, 0, 6));
 
 	PQclear(res);
 }
@@ -88,7 +81,6 @@ getvalue(struct variable *vp,
             size_t * length,
             int exact, size_t * var_len, WriteMethod ** write_method)
 {
-    //static long long_ret;
 
     DEBUGMSGTL((PGSTATBGWRITER_NAME, "getvalue(%d)\n", vp->magic));
 	printf("getvalue(%d)\n", vp->magic);
@@ -102,19 +94,19 @@ getvalue(struct variable *vp,
 
     switch (vp->magic) {
     case PGSTATBGWRITER_CHECKPOINTSTIMED:
-        return (u_char *) & checkpoints_timed;
+        return (u_char *) & data.checkpoints_timed;
 	case PGSTATBGWRITER_CHECKPOINTSREQUESTED:
-        return (u_char *) & checkpoints_req;
+        return (u_char *) & data.checkpoints_req;
 	case PGSTATBGWRITER_BUFFERSCHECKPOINT:
-        return (u_char *) & buffers_checkpoint;
+        return (u_char *) & data.buffers_checkpoint;
 	case PGSTATBGWRITER_BUFFERSCLEAN:
-        return (u_char *) & buffers_clean;
+        return (u_char *) & data.buffers_clean;
 	case PGSTATBGWRITER_MAXWRITTENCLEAN:
-        return (u_char *) & maxwritten_clean;
+        return (u_char *) & data.maxwritten_clean;
 	case PGSTATBGWRITER_BUFFERSBACKEND:
-        return (u_char *) & buffers_backend;
+        return (u_char *) & data.buffers_backend;
 	case PGSTATBGWRITER_BUFFERSALLOCATED:
-        return (u_char *) & buffers_alloc;
+        return (u_char *) & data.buffers_alloc;
     default:
         DEBUGMSGTL(("snmpd", "unknown sub-id %d in %s\n", vp->magic, PGSTATBGWRITER_NAME));
     }

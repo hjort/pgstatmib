@@ -9,6 +9,17 @@
 /* module name */
 #define PGSTATBGWRITER_NAME	"pgstatBgWriter"
 
+/* structures */
+typedef struct {
+	u_long checkpoints_timed;
+	u_long checkpoints_req;
+	u_long buffers_checkpoint;
+	u_long buffers_clean;
+	u_long maxwritten_clean;
+	u_long buffers_backend;
+	u_long buffers_alloc;
+} pgstatBgWriterData;
+
 //config_require(util_funcs/header_generic)
 
 /* function declarations */
