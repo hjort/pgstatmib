@@ -7,6 +7,7 @@ SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
 
 SELECT datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit,
 	tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted,
+	pg_database_size(datid) as database_size,
 	(xact_rollback::numeric / (xact_commit + xact_rollback + 1e-5) * 1e4)::int as rollback_ratio,
 	(blks_hit::numeric / (blks_hit + blks_read + 1e-5) * 1e4)::int as cache_hit_ratio,
 	(tup_inserted + tup_updated + tup_deleted) as tup_modified
@@ -29,9 +30,10 @@ pgstatDatabaseTuplesInserted	1.3.6.1.4.1.27645.3.1.10	tup_inserted	211416
 pgstatDatabaseTuplesUpdated	1.3.6.1.4.1.27645.3.1.11	tup_updated	33633
 pgstatDatabaseTuplesDeleted	1.3.6.1.4.1.27645.3.1.12	tup_deleted	94
 .............................................................................................................
-pgstatDatabaseRollbackRatio	1.3.6.1.4.1.27645.3.1.13	xact_rollback / (xact_commit + xact_rollback)
-pgstatDatabaseCacheHitRatio	1.3.6.1.4.1.27645.3.1.14	blks_hit / (blks_hit + blks_read)
-pgstatDatabaseTuplesModified	1.3.6.1.4.1.27645.3.1.15	tup_inserted + tup_updated + tup_deleted
+pgstatDatabaseSizeMB		1.3.6.1.4.1.27645.3.1.13	pg_database_size(datid)
+pgstatDatabaseRollbackRatio	1.3.6.1.4.1.27645.3.1.14	xact_rollback / (xact_commit + xact_rollback)
+pgstatDatabaseCacheHitRatio	1.3.6.1.4.1.27645.3.1.15	blks_hit / (blks_hit + blks_read)
+pgstatDatabaseTuplesModified	1.3.6.1.4.1.27645.3.1.16	tup_inserted + tup_updated + tup_deleted
 
 postgres=# SELECT * FROM pg_stat_database WHERE datname !~ '^template' ORDER BY datid;
 -[ RECORD 1 ]-+---------

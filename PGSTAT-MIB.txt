@@ -198,7 +198,7 @@ pgstatDatabaseTuplesDeleted OBJECT-TYPE
         must not depend on such an initialization."
     ::= { pgstatDatabaseEntry 12 }
 
-pgstatDatabaseRollbackRatio OBJECT-TYPE
+pgstatDatabaseSizeMB OBJECT-TYPE
     SYNTAX     Unsigned32 (0..10000)
     MAX-ACCESS read-only
     STATUS     current
@@ -206,7 +206,7 @@ pgstatDatabaseRollbackRatio OBJECT-TYPE
         "TODO: ..."
     ::= { pgstatDatabaseEntry 13 }
 
-pgstatDatabaseCacheHitRatio OBJECT-TYPE
+pgstatDatabaseRollbackRatio OBJECT-TYPE
     SYNTAX     Unsigned32 (0..10000)
     MAX-ACCESS read-only
     STATUS     current
@@ -214,13 +214,21 @@ pgstatDatabaseCacheHitRatio OBJECT-TYPE
         "TODO: ..."
     ::= { pgstatDatabaseEntry 14 }
 
+pgstatDatabaseCacheHitRatio OBJECT-TYPE
+    SYNTAX     Unsigned32 (0..10000)
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "TODO: ..."
+    ::= { pgstatDatabaseEntry 15 }
+
 pgstatDatabaseTuplesModified OBJECT-TYPE
     SYNTAX     Counter32
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
         "TODO: ..."
-    ::= { pgstatDatabaseEntry 15 }
+    ::= { pgstatDatabaseEntry 16 }
 
 ----------------------------------------------------------------
 

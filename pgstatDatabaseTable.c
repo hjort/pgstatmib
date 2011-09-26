@@ -26,7 +26,7 @@ initialize_table_pgstatDatabaseTable(void)
     int i;
     char *datname;
     int32_t numbackends, rollback_ratio, cache_hit_ratio;
-    u_long xact_commit, xact_rollback, blks_read, blks_hit;
+    u_long xact_commit, xact_rollback, blks_read, blks_hit, database_size;
     u_long tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, tup_modified;
 
     /* create the table structure itself */
@@ -60,6 +60,7 @@ initialize_table_pgstatDatabaseTable(void)
             COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, 0, NULL, 0,
+            COLUMN_PGSTATDATABASESIZEMB, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, 0, NULL, 0,
@@ -100,6 +101,7 @@ PGSTAT-MIB::pgstatDatabaseRollbacks.16448 = Counter32: 50
 	res = PQexec(dbconn, "\
 SELECT datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, \
 	tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, \
+	pg_database_size(datid) as database_size, \
 	(xact_rollback::numeric / (xact_commit + xact_rollback + 1e-5) * 1e4)::int as rollback_ratio, \
 	(blks_hit::numeric / (blks_hit + blks_read + 1e-5) * 1e4)::int as cache_hit_ratio, \
 	(tup_inserted + tup_updated + tup_deleted) as tup_modified \
@@ -156,13 +158,16 @@ ORDER BY datid");
 		tup_deleted = atoi(PQgetvalue(res, i, 11));
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, (char *) &tup_deleted, sizeof(tup_deleted));
 
-		rollback_ratio = atoi(PQgetvalue(res, i, 12));
+		database_size = atoi(PQgetvalue(res, i, 12));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASESIZEMB, ASN_UNSIGNED, (char *) &database_size, sizeof(database_size));
+
+		rollback_ratio = atoi(PQgetvalue(res, i, 13));
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, (char *) &rollback_ratio, sizeof(rollback_ratio));
 
-		cache_hit_ratio = atoi(PQgetvalue(res, i, 13));
+		cache_hit_ratio = atoi(PQgetvalue(res, i, 14));
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, (char *) &cache_hit_ratio, sizeof(cache_hit_ratio));
 
-		tup_modified = atoi(PQgetvalue(res, i, 14));
+		tup_modified = atoi(PQgetvalue(res, i, 15));
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, (char *) &tup_modified, sizeof(tup_modified));
 	}
 

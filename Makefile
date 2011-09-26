@@ -43,6 +43,8 @@ all: $(TARGETS)
 pgstatmibd: $(OBJECTS)
 	$(CC) -o pgstatmibd $(OBJECTS) $(BUILDAGENTLIBS) $(LDLIBS)
 
+#pgstatDatabaseTable.o: pgstatDatabaseTable.c pgstatDatabaseTable.h
+
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
