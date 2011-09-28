@@ -4,6 +4,9 @@
 # the combinations here.  Instead, look at the libraries that were
 # used when linking the snmpd master agent and copy those to this file.
 
+# Dependency Requirements: pq and snmp libs
+# On Debian-based Linux: apt-get install libpq-dev libsnmp-dev
+
 CC = gcc
 GCC = yes
 
