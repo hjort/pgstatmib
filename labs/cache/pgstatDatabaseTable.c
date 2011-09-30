@@ -484,7 +484,7 @@ pgstatDatabaseTable_load(netsnmp_cache * cache, void *vmagic)
      */
     /** CONTAINER_INSERT(container, record); */
 
-this = pgstatDatabaseTable_createEntry(table, pgstatDatabaseId);
+//this = pgstatDatabaseTable_createEntry(table, pgstatDatabaseId);
 
     return 0;
 }
