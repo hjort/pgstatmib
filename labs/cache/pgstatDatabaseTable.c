@@ -5,11 +5,11 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
-#include <net-snmp/agent/table_container.h>
 
-//#include <net-snmp/library/container.h>
+//#include <net-snmp/agent/cache_handler.h>
+//#include <net-snmp/agent/table_container.h>
 //#include <net-snmp/data_access/swinst.h>
-#include <net-snmp/agent/cache_handler.h>
+//#include <net-snmp/library/container.h>
 
 #include "pgstatDatabaseTable.h"
 
@@ -160,9 +160,8 @@ initialize_table_pgstatDatabaseTable(void)
         netsnmp_cache_free(cache);
 #endif
 
-	// FIXME: use netsnmp_table_registration_info_free here!
     if (table_info)
-        ;//netsnmp_table_registration_info_free(table_info);
+        netsnmp_table_registration_info_free(table_info);
 
     if (container)
         CONTAINER_FREE(container);
