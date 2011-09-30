@@ -4,12 +4,19 @@
 #ifndef PGSTATDATABASETABLE_H
 #define PGSTATDATABASETABLE_H
 
+#define USE_CACHE	TRUE
+
 /*
  * function declarations 
  */
 void init_pgstatDatabaseTable(void);
 void initialize_table_pgstatDatabaseTable(void);
+
+#ifdef USE_CACHE
 Netsnmp_Node_Handler pgstatDatabaseTable_handler;
+NetsnmpCacheLoad pgstatDatabaseTable_load;
+NetsnmpCacheFree pgstatDatabaseTable_free;
+#endif
 
 /*
  * column number definitions for table pgstatDatabaseTable 

@@ -7,13 +7,6 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include "pgstatDatabaseTable.h"
 
-#define USE_CACHE	TRUE
-
-#ifdef USE_CACHE
-static void     _cache_free(netsnmp_cache * cache, void *magic);
-static int      _cache_load(netsnmp_cache * cache, void *vmagic);
-#endif
-
 /** Initializes the pgstatDatabaseTable module */
 void
 init_pgstatDatabaseTable(void)
@@ -95,7 +88,8 @@ initialize_table_pgstatDatabaseTable(void)
      * inject cache helper
      */
     cache = netsnmp_cache_create(30,    /* timeout in seconds */
-                                 _cache_load, _cache_free,
+                                 pgstatDatabaseTable_load,
+				 pgstatDatabaseTable_free,
                                  (oid *) pgstatDatabaseTable_oid,
                                  pgstatDatabaseTable_oid_len);
 
@@ -151,11 +145,11 @@ initialize_table_pgstatDatabaseTable(void)
 
 #ifdef USE_CACHE
     if (cache)
-        netsnmp_cache_free(cache);
+        ;//netsnmp_cache_free(cache); // WHERE IS IT?!
 #endif
 
     if (table_info)
-        netsnmp_table_registration_info_free(table_info);
+        ;//netsnmp_table_registration_info_free(table_info); // WHERE IS IT?!
 
     if (container)
         CONTAINER_FREE(container);
@@ -463,10 +457,13 @@ pgstatDatabaseTable_handler(netsnmp_mib_handler *handler,
 /**
  * @internal
  */
-static int
-_cache_load(netsnmp_cache * cache, void *vmagic)
+int
+pgstatDatabaseTable_load(netsnmp_cache * cache, void *vmagic)
 {
     netsnmp_container *container;
+
+	long pgstatDatabaseId = 1;
+	netsnmp_tdata_row *this;
 
 	printf("loading cache: %d\n", (int) &cache);
 
@@ -487,6 +484,8 @@ _cache_load(netsnmp_cache * cache, void *vmagic)
      */
     /** CONTAINER_INSERT(container, record); */
 
+this = pgstatDatabaseTable_createEntry(table, pgstatDatabaseId);
+
     return 0;
 }
 
@@ -506,8 +505,8 @@ pgstatDatabaseTable_freeEntry_cb(pgstatDatabaseTable_entry * entry,
 /**
  * @internal
  */
-static void
-_cache_free(netsnmp_cache * cache, void *magic)
+void
+pgstatDatabaseTable_free(netsnmp_cache * cache, void *magic)
 {
     netsnmp_container *container;
 

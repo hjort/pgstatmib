@@ -7,7 +7,7 @@
 CC = gcc
 GCC = yes
 
-OBJECTS = example-demon.o pgstatDatabaseTable2.o
+OBJECTS = example-demon.o pgstatDatabaseTable.o
 TARGETS = example-demon
 
 CFLAGS = -I. `net-snmp-config --cflags`

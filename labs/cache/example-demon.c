@@ -3,7 +3,7 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include <signal.h>
 
-#include "pgstatDatabaseTable2.h"
+#include "pgstatDatabaseTable.h"
 //#include <testDummyTable.h>
 
 static int keep_running;
