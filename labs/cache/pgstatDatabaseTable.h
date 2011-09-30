@@ -4,11 +4,13 @@
 #ifndef PGSTATDATABASETABLE_H
 #define PGSTATDATABASETABLE_H
 
+//config_require(host/data_access/swinst)
+
 /*
  * function declarations 
  */
-void            init_pgstatDatabaseTable(void);
-void            initialize_table_pgstatDatabaseTable(void);
+void init_pgstatDatabaseTable(void);
+void initialize_table_pgstatDatabaseTable(void);
 Netsnmp_Node_Handler pgstatDatabaseTable_handler;
 
 /*

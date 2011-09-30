@@ -16,9 +16,14 @@ BUILDAGENTLIBS = `net-snmp-config --agent-libs`
 
 all: $(TARGETS)
 
-pgstatmibd: $(OBJECTS)
+example-demon: $(OBJECTS)
 	$(CC) -o example-demon $(OBJECTS) $(BUILDAGENTLIBS) $(LDLIBS)
 
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
+agent-start:
+	sudo ./example-demon
+
+client-test:
+	snmpwalk localhost enterprises.27645.3.1

@@ -5,12 +5,15 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
-#include <net-snmp/agent/net-snmp-agent-includes.h>
 #include <net-snmp/agent/table_container.h>
 
-#include <net-snmp/library/container.h>
+//#include <net-snmp/library/container.h>
+//#include <net-snmp/data_access/swinst.h>
+#include <net-snmp/agent/cache_handler.h>
 
 #include "pgstatDatabaseTable.h"
+
+#define USE_CACHE	TRUE
 
 #ifdef USE_CACHE
 static void     _cache_free(netsnmp_cache * cache, void *magic);
@@ -110,6 +113,8 @@ initialize_table_pgstatDatabaseTable(void)
     cache->flags = NETSNMP_CACHE_DONT_INVALIDATE_ON_SET;
     cache->magic = container;
 
+	printf("cache created: %d\n", &cache);
+
     handler = netsnmp_cache_handler_get(cache);
     if (NULL == handler) {
         snmp_log(LOG_ERR,
@@ -138,6 +143,7 @@ initialize_table_pgstatDatabaseTable(void)
      * Initialise the contents of the table here
      */
 
+	printf("table registered: %d\n", &table_info);
 
     return;                     /* ok */
 
@@ -154,8 +160,9 @@ initialize_table_pgstatDatabaseTable(void)
         netsnmp_cache_free(cache);
 #endif
 
+	// FIXME: use netsnmp_table_registration_info_free here!
     if (table_info)
-        netsnmp_table_registration_info_free(table_info);
+        ;//netsnmp_table_registration_info_free(table_info);
 
     if (container)
         CONTAINER_FREE(container);
@@ -204,6 +211,8 @@ pgstatDatabaseTable_createEntry(netsnmp_container * container, //,
 {
     pgstatDatabaseTable_entry *entry;
 
+	printf("creating entry: %d\n", &entry);
+
     entry = SNMP_MALLOC_TYPEDEF(pgstatDatabaseTable_entry);
     if (!entry)
         return NULL;
@@ -221,10 +230,13 @@ void
 pgstatDatabaseTable_removeEntry(netsnmp_container * container,
                                 pgstatDatabaseTable_entry * entry)
 {
+	printf("removing entry: %d\n", &entry);
 
     if (!entry)
         return;                 /* Nothing to remove */
+
     CONTAINER_REMOVE(container, entry);
+
     if (entry)
         SNMP_FREE(entry);       /* XXX - release any other internal resources */
 }
@@ -233,9 +245,11 @@ pgstatDatabaseTable_removeEntry(netsnmp_container * container,
 void
 pgstatDatabaseTable_freeEntry(pgstatDatabaseTable_entry * entry)
 {
+	printf("freeing entry: %d\n", &entry);
 
     if (!entry)
         return;                 /* Nothing to remove */
+
     SNMP_FREE(entry);           /* XXX - release any other internal resources */
 }
 
@@ -254,6 +268,8 @@ pgstatDatabaseTable_handler(netsnmp_mib_handler *handler,
 
     DEBUGMSGTL(("pgstatDatabaseTable:handler", "Processing request (%d)\n",
                 reqinfo->mode));
+
+	printf("handling request: %d\n", reqinfo->mode);
 
     switch (reqinfo->mode) {
     /*
@@ -459,6 +475,8 @@ _cache_load(netsnmp_cache * cache, void *vmagic)
 {
     netsnmp_container *container;
 
+	printf("loading cache: %d\n", &cache);
+
     DEBUGMSGTL(("internal:pgstatDatabaseTable:_cache_load", "called\n"));
 
     if ((NULL == cache) || (NULL == cache->magic)) {
@@ -487,6 +505,7 @@ static void
 pgstatDatabaseTable_freeEntry_cb(pgstatDatabaseTable_entry * entry,
                                  void *magic)
 {
+	printf("freeing entry: %d\n", &entry);
 
     pgstatDatabaseTable_freeEntry(entry);
 }
@@ -498,6 +517,8 @@ static void
 _cache_free(netsnmp_cache * cache, void *magic)
 {
     netsnmp_container *container;
+
+	printf("freeing cache: %d\n", &cache);
 
     DEBUGMSGTL(("internal:pgstatDatabaseTable:_cache_free", "called\n"));
 
