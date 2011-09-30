@@ -4,6 +4,8 @@
 #include <signal.h>
 
 #include <nstAgentSubagentObject.h>
+//#include <pgstatDatabaseTable.h>
+#include <testDummyTable.h>
 
 static int keep_running;
 
@@ -44,6 +46,8 @@ main (int argc, char **argv) {
 
   /* mib code: init_nstAgentSubagentObject from nstAgentSubagentObject.C */
   init_nstAgentSubagentObject();  
+  //init_pgstatDatabaseTable();
+  init_testDummyTable();
 
   /* initialize vacm/usm access control  */
   if (!agentx_subagent) {
