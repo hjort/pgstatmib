@@ -1,0 +1,28 @@
+--blank-lines-after-declarations
+--blank-lines-after-procedures
+--blank-lines-before-block-comments
+--brace-indent 0
+--braces-after-if-line
+--braces-after-struct-decl-line
+--break-after-boolean-operator
+--case-brace-indentation 0
+--case-indentation 0
+--continue-at-parentheses
+--dont-break-procedure-type
+--dont-cuddle-do-while
+--dont-cuddle-else
+--dont-space-special-semicolon
+--format-all-comments
+--honour-newlines
+--indent-level 8
+--leave-optional-blank-lines
+--line-length 80
+--no-space-after-function-call-names
+--no-space-after-parentheses
+--use-tabs
+--space-after-cast
+--space-after-for
+--space-after-if
+--space-after-while
+--struct-brace-indentation 0
+--verbose
