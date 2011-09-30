@@ -10,7 +10,7 @@
 CC=gcc
 
 OBJS1=snmpdemoapp.o
-OBJS2=example-demon.o nstAgentSubagentObject.o testDummyTable.o #pgstatDatabaseTable.o
+OBJS2=example-demon.o nstAgentSubagentObject.o #pgstatDatabaseTable.o testDummyTable.o
 OBJS3=asyncapp.o
 TARGETS=example-demon snmpdemoapp asyncapp
 
