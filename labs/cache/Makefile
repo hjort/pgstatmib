@@ -10,8 +10,8 @@ GCC = yes
 OBJECTS = example-demon.o pgstatDatabaseTable.o
 TARGETS = example-demon
 
-CFLAGS = -I. `net-snmp-config --cflags` `pg_config --cflags`
-BUILDLIBS = `net-snmp-config --libs` `pg_config --libs`
+CFLAGS = -I. `net-snmp-config --cflags`
+BUILDLIBS = `net-snmp-config --libs`
 BUILDAGENTLIBS = `net-snmp-config --agent-libs`
 
 all: $(TARGETS)
