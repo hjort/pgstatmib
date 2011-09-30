@@ -3,7 +3,7 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include <signal.h>
 
-#include <pgstatDatabaseTable.h>
+#include "pgstatDatabaseTable2.h"
 //#include <testDummyTable.h>
 
 static int keep_running;
@@ -49,8 +49,8 @@ main (int argc, char **argv) {
 
   /* initialize vacm/usm access control  */
   if (!agentx_subagent) {
-      init_vacm_vars();
-      init_usmUser();
+//      init_vacm_vars();
+//      init_usmUser();
   }
 
   /* example-demon will be used to read example-demon.conf files. */
@@ -80,4 +80,3 @@ main (int argc, char **argv) {
 
   return 0;
 }
-

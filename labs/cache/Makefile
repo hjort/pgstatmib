@@ -7,7 +7,7 @@
 CC = gcc
 GCC = yes
 
-OBJECTS = example-demon.o pgstatDatabaseTable.o
+OBJECTS = example-demon.o pgstatDatabaseTable2.o
 TARGETS = example-demon
 
 CFLAGS = -I. `net-snmp-config --cflags`
@@ -20,9 +20,9 @@ example-demon: $(OBJECTS)
 	$(CC) -o example-demon $(OBJECTS) $(BUILDAGENTLIBS) $(LDLIBS)
 
 clean:
-	rm $(OBJECTS) $(TARGETS)
+	rm -f $(OBJECTS) $(TARGETS) *.o
 
-agent-start:
+agent-start: example-demon
 	sudo ./example-demon
 
 client-test:

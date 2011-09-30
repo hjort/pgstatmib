@@ -5,12 +5,6 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
-
-//#include <net-snmp/agent/cache_handler.h>
-//#include <net-snmp/agent/table_container.h>
-//#include <net-snmp/data_access/swinst.h>
-//#include <net-snmp/library/container.h>
-
 #include "pgstatDatabaseTable.h"
 
 #define USE_CACHE	TRUE
