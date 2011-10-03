@@ -9,6 +9,8 @@
 /* module name */
 #define PGSTATBGWRITER_NAME	"pgstatBgWriter"
 
+#define PGSTATBGWRITER_CACHE_TIMEOUT	30	// in seconds
+
 /* structures */
 typedef struct {
 	u_long checkpoints_timed;
@@ -24,8 +26,8 @@ typedef struct {
 
 /* function declarations */
 void init_pgstatBgWriter(void);
-void refreshNumbers(void);
-void loadNumbersFromDB(void);
+void refresh_numbers(void);
+void load_numbers_from_db(void);
 FindVarMethod getvalue;
 
 /* scalar number definitions for pgstatBgWriter */
@@ -36,5 +38,8 @@ FindVarMethod getvalue;
 #define PGSTATBGWRITER_MAXWRITTENCLEAN			5
 #define PGSTATBGWRITER_BUFFERSBACKEND			6
 #define PGSTATBGWRITER_BUFFERSALLOCATED			7
+
+#define PGSTATBGWRITER_FIRST		PGSTATBGWRITER_CHECKPOINTSTIMED
+#define PGSTATBGWRITER_LAST		PGSTATBGWRITER_BUFFERSALLOCATED
 
 #endif /* PGSTATBGWRITER_H */

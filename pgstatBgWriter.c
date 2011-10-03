@@ -7,7 +7,7 @@
 #include "pgstatmibd.h"
 #include "pgstatBgWriter.h"
 
-//#include "util_funcs/header_generic.h"
+#include <net-snmp/agent/util_funcs.h>
 
 static oid pgstatBgWriter_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 10 };
 
@@ -30,25 +30,36 @@ init_pgstatBgWriter(void)
 
 static pgstatBgWriterData data;
 
+static time_t last = 0;		//for caching purposes
+
 /**
  * refresh numbers
  */
 void
-refreshNumbers(void) {
+refresh_numbers(void) {
+	time_t now;
+	unsigned int diff;
+
+	now = time (NULL);
 
 	// TODO: cache these numbers to prevent going to database so frequently
+	
+	diff = (now - last);
 
-	loadNumbersFromDB();
+	if (last == 0 || diff >= PGSTATBGWRITER_CACHE_TIMEOUT) {
+		load_numbers_from_db();
+		last = now;
+	}
 }
 
 /**
  * load counters from database
  */
 void
-loadNumbersFromDB(void) {
+load_numbers_from_db(void) {
 	PGresult *res;
 
-//    printf("loadNumbersFromDB\n");
+    printf("load_numbers_from_db\n");
 
 	res = PQexec(dbconn, "\
 SELECT checkpoints_timed, checkpoints_req, \
@@ -89,8 +100,8 @@ getvalue(struct variable *vp,
         return NULL;
 
 	// TODO: make a better bound checking routine!
-	if (vp->magic >= 1 && vp->magic <= 7)
-		refreshNumbers();
+	if (vp->magic >= PGSTATBGWRITER_FIRST && vp->magic <= PGSTATBGWRITER_LAST)
+		refresh_numbers();
 
     switch (vp->magic) {
     case PGSTATBGWRITER_CHECKPOINTSTIMED:
