@@ -67,6 +67,10 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
 Usage Samples
 -------------
 
+$ snmpget localhost pgstatServerRollbackRatio.0 pgstatServerCacheHitRatio.0
+PGSTAT-MIB::pgstatServerRollbackRatio.0 = Gauge32: 0
+PGSTAT-MIB::pgstatServerCacheHitRatio.0 = Gauge32: 9979
+
 $ snmpwalk localhost pgstatServer
 PGSTAT-MIB::pgstatServerDatabaseCount.0 = INTEGER: 6
 PGSTAT-MIB::pgstatServerTotalSizeMB.0 = Gauge32: 77145528
