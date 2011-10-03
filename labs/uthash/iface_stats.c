@@ -22,7 +22,7 @@ typedef struct iface
 } ifStats;
 
 ifStats *stats = NULL;
-static int iface_count = 0;
+//static int iface_count = 0;
 
 /*
 void
@@ -51,15 +51,15 @@ const char *IFACE_NAMES[] = { "lo", "eth0", "wlan0" };
 int
 load_iface_stats (int id, ifStats * s)
 {
-  s->id = id;
-  strcpy (s->name, IFACE_NAMES[id - 1]);
-  s->rxbytes = id * 100;
-  s->rxpacks = id * 1;
-  s->txbytes = id * 50;
-  s->txpacks = id * 5;
+  strcpy (s->name, id >=1 && id <= 3 ? IFACE_NAMES[id - 1] : "unknown");
+  s->rxbytes += id * 100;
+  s->rxpacks += id * 1;
+  s->txbytes += id * 50;
+  s->txpacks += id * 5;
   return 0;
 }
 
+/*
 int
 load_all_iface_stats (void)
 {
@@ -80,6 +80,7 @@ load_all_iface_stats (void)
 
   return 0;
 }
+*/
 
 ifStats *
 get_iface_stats (int id)
@@ -91,13 +92,15 @@ get_iface_stats (int id)
   diff = CACHE_TIMEOUT;
   now = time (NULL);
 
-	fprintf(stderr, "id: %d, &id: %i\n", id, &id);
+	fprintf(stderr, "id: %d, &id: %d\n", id, (int) &id);
   HASH_FIND_INT (stats, &id, s);
+	fprintf(stderr, "s: %s\n", (char *) s);
 
   if (!s)
     {
 		fprintf(stderr, "id %d not in cache...\n", id);
       s = (ifStats *) malloc (sizeof (ifStats));
+      s->id = id;
       HASH_ADD_INT (stats, id, s);
     }
   else
@@ -141,6 +144,7 @@ main (int argc, char *argv[])
 {
   char in[10];
   ifStats *s;
+  int id;
 
   while (1)
     {
@@ -151,7 +155,8 @@ main (int argc, char *argv[])
 	{
 	case 1:
 	  printf ("iface number: ");
-	  s = get_iface_stats (atoi (gets (in)));
+          id = atoi (gets (in));
+	  s = get_iface_stats (id);
 	  show_iface_stats (s);
 	  printf ("\n");
 	  break;
@@ -163,3 +168,38 @@ main (int argc, char *argv[])
 	}
     }
 }
+
+int main3(void)
+{
+  int id, cont;
+  ifStats *s;
+  for (cont = 1; cont <= 2; cont++)
+    for (id = 1; id <= 3; id++) {
+      s = get_iface_stats (id);
+      sleep(1);
+    }
+  show_all_iface_stats ();
+}
+
+int main4(void)
+{
+  int id, cont;
+  ifStats *s;
+  for (cont = 1; cont <= 2; cont++)
+    for (id = 1; id <= 3; id++) {
+      HASH_FIND_INT (stats, &id, s);
+
+      if (!s)
+      {
+	fprintf(stderr, "id %d not in cache...\n", id);
+        s = (ifStats *) malloc (sizeof (ifStats));
+        s->id = id;
+        HASH_ADD_INT (stats, id, s);
+        load_iface_stats (id, s);
+      }
+
+      sleep(1);
+    }
+  show_all_iface_stats ();
+}
+
