@@ -6,14 +6,28 @@ pgStatMIB ::= { iso(1) org(3) dod(6) internet(1) private(4) enterprises(1) pgsql
 enterprises.pgsql.pgStatMIB => 1.3.6.1.4.1.27645.3
 
 
-Tables and Scalars Mapped so Far
---------------------------------
+MIB Tree Designed so Far
+------------------------
 
 enterprises.pgsql (1.3.6.1.4.1.27645)
 |
 +--pgStatMIB(3)
    |
-   +--pgstatDatabase(1)
+   +--pgstatServer(1)
+   |  |
+   |  +-- -R-- Integer32 pgstatServerDatabaseCount(1)
+   |  +-- -R-- Unsigned  pgstatServerTotalSizeMB(2)
+   |  +-- -R-- Gauge     pgstatServerTotalBackends(3)
+   |  +-- -R-- Counter   pgstatServerTotalCommits(4)
+   |  +-- -R-- Counter   pgstatServerTotalRollbacks(5)
+   |  +-- -R-- Counter   pgstatServerTotalBlocksRead(6)
+   |  +-- -R-- Counter   pgstatServerTotalBlocksHit(7)
+   |  +-- -R-- Unsigned  pgstatServerRollbackRatio(8)
+   |  |        Range: 0..10000
+   |  +-- -R-- Unsigned  pgstatServerCacheHitRatio(9)
+   |           Range: 0..10000
+   |
+   +--pgstatDatabase(2)
    |  |
    |  +--pgstatDatabaseEntry(1)
    |     |  Index: pgstatDatabaseId
@@ -41,32 +55,54 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
    |
    +--pgstatBgWriter(10)
       |
-      +-- -R-- INTEGER   pgstatBgWriterCheckpointsTimed(1)
-      +-- -R-- INTEGER   pgstatBgWriterCheckpointsRequested(2)
-      +-- -R-- INTEGER   pgstatBgWriterBuffersCheckpoint(3)
-      +-- -R-- INTEGER   pgstatBgWriterBuffersClean(4)
-      +-- -R-- INTEGER   pgstatBgWriterMaxWrittenClean(5)
-      +-- -R-- INTEGER   pgstatBgWriterBuffersBackend(6)
-      +-- -R-- INTEGER   pgstatBgWriterBuffersAllocated(7)
+      +-- -R-- Counter   pgstatBgWriterCheckpointsTimed(1)
+      +-- -R-- Counter   pgstatBgWriterCheckpointsRequested(2)
+      +-- -R-- Counter   pgstatBgWriterBuffersCheckpoint(3)
+      +-- -R-- Counter   pgstatBgWriterBuffersClean(4)
+      +-- -R-- Counter   pgstatBgWriterMaxWrittenClean(5)
+      +-- -R-- Counter   pgstatBgWriterBuffersBackend(6)
+      +-- -R-- Counter   pgstatBgWriterBuffersAllocated(7)
 
 
 Usage Samples
 -------------
 
 $ snmpwalk localhost pgstatDatabase
-PGSTAT-MIB::pgstatDatabaseId.11874 = INTEGER: 11874
-PGSTAT-MIB::pgstatDatabaseId.16448 = INTEGER: 16448
-PGSTAT-MIB::pgstatDatabaseName.11874 = STRING: postgres
-PGSTAT-MIB::pgstatDatabaseName.16448 = STRING: rodrigo
-PGSTAT-MIB::pgstatDatabaseBackends.11874 = Gauge32: 200
-PGSTAT-MIB::pgstatDatabaseBackends.16448 = Gauge32: 10
-PGSTAT-MIB::pgstatDatabaseCommits.11874 = Counter32: 50000
-PGSTAT-MIB::pgstatDatabaseCommits.16448 = Counter32: 25000
-PGSTAT-MIB::pgstatDatabaseRollbacks.11874 = Counter32: 100
-PGSTAT-MIB::pgstatDatabaseRollbacks.16448 = Counter32: 50
+PGSTAT-MIB::pgstatDatabaseId.16385 = INTEGER: 16385
+PGSTAT-MIB::pgstatDatabaseId.31490 = INTEGER: 31490
+PGSTAT-MIB::pgstatDatabaseName.16385 = STRING: rodrigo
+PGSTAT-MIB::pgstatDatabaseName.31490 = STRING: bench
+PGSTAT-MIB::pgstatDatabaseBackends.16385 = Gauge32: 1
+PGSTAT-MIB::pgstatDatabaseBackends.31490 = Gauge32: 50
+PGSTAT-MIB::pgstatDatabaseCommits.16385 = Counter32: 5481
+PGSTAT-MIB::pgstatDatabaseCommits.31490 = Counter32: 32843
+PGSTAT-MIB::pgstatDatabaseRollbacks.16385 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseRollbacks.31490 = Counter32: 6
+PGSTAT-MIB::pgstatDatabaseBlocksRead.16385 = Counter32: 416
+PGSTAT-MIB::pgstatDatabaseBlocksRead.31490 = Counter32: 8015
+PGSTAT-MIB::pgstatDatabaseBlocksHit.16385 = Counter32: 89343
+PGSTAT-MIB::pgstatDatabaseBlocksHit.31490 = Counter32: 1486061
+PGSTAT-MIB::pgstatDatabaseTuplesReturned.16385 = Counter32: 1524714
+PGSTAT-MIB::pgstatDatabaseTuplesReturned.31490 = Counter32: 1365789
+PGSTAT-MIB::pgstatDatabaseTuplesFetched.16385 = Counter32: 11013
+PGSTAT-MIB::pgstatDatabaseTuplesFetched.31490 = Counter32: 324244
+PGSTAT-MIB::pgstatDatabaseTuplesInserted.16385 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseTuplesInserted.31490 = Counter32: 127745
+PGSTAT-MIB::pgstatDatabaseTuplesUpdated.16385 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseTuplesUpdated.31490 = Counter32: 82903
+PGSTAT-MIB::pgstatDatabaseTuplesDeleted.16385 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseTuplesDeleted.31490 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseSizeMB.16385 = Gauge32: 5407012
+PGSTAT-MIB::pgstatDatabaseSizeMB.31490 = Gauge32: 42672420
+PGSTAT-MIB::pgstatDatabaseRollbackRatio.16385 = Gauge32: 0
+PGSTAT-MIB::pgstatDatabaseRollbackRatio.31490 = Gauge32: 2
+PGSTAT-MIB::pgstatDatabaseCacheHitRatio.16385 = Gauge32: 9954
+PGSTAT-MIB::pgstatDatabaseCacheHitRatio.31490 = Gauge32: 9946
+PGSTAT-MIB::pgstatDatabaseTuplesModified.16385 = Counter32: 0
+PGSTAT-MIB::pgstatDatabaseTuplesModified.31490 = Counter32: 210648
 
 $ snmpget localhost pgstatDatabaseBackends.16448 -On
-.1.3.6.1.4.1.27645.3.1.1.3.16448 = Gauge32: 10
+.1.3.6.1.4.1.27645.3.2.1.3.16448 = Gauge32: 10
 
 $ snmpget localhost pgstatDatabaseRollbacks.11874 -Of
 .iso.org.dod.internet.private.enterprises.pgsql.pgStatMIB.pgstatDatabaseTable.pgstatDatabaseEntry.pgstatDatabaseRollbacks.11874 = Counter32: 100
@@ -76,36 +112,45 @@ SNMP table: PGSTAT-MIB::pgstatDatabaseTable
 
 Id              Name            Backends        Commits         Rollbacks       
 BlocksRead      BlocksHit       TuplesReturned  TuplesFetched   TuplesInserted  
-TuplesUpdated   TuplesDeleted   RollbackRatio   CacheHitRatio   TuplesModified  
+TuplesUpdated   TuplesDeleted   SizeMB          RollbackRatio   CacheHitRatio   
+TuplesModified  
 
-index: [11874]
-11874           postgres        200             50000           100             
-?               ?               ?               ?               ?               
-?               ?               15              9775            20000           
+index: [11564]
+11564           postgres        1               5536            0               
+577             93815           1527457         13737           0               
+0               0               5407012         0               9939            
+0               
 
-index: [16448]
-16448           rodrigo         10              25000           50              
-?               ?               ?               ?               ?               
-?               ?               5               8920            3000            
+index: [16385]
+16385           rodrigo         0               5481            0               
+416             89343           1524714         11013           0               
+0               0               5407012         0               9954            
+0               
+
+index: [31490]
+31490           bench           0               32843           6               
+8015            1486061         1365789         324244          127745          
+82903           0               42672420        2               9946            
+210648          
 
 $ snmpwalk localhost pgstatBgWriter
-PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = INTEGER: 46
-PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 11
-PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 1483
-PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = INTEGER: 15
-PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = INTEGER: 11
-PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = INTEGER: 3077
-PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = INTEGER: 1583
+PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = Counter32: 544
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = Counter32: 6
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = Counter32: 11347
+PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = Counter32: 0
+PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = Counter32: 0
+PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = Counter32: 6754
+PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = Counter32: 7450
 
 $ snmpget localhost pgstatBgWriterCheckpointsRequested.0
-PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = INTEGER: 12
+PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = Counter32: 6
 
 $ snmpgetnext localhost pgstatBgWriterBuffersCheckpoint
-PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 567
+PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = Counter32: 11347
 
 
-Expected Sub-Entries
---------------------
+Status of Expected Sub-Trees
+----------------------------
 
 pgstatServer: specified
 

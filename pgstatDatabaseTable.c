@@ -11,7 +11,7 @@
 void
 initialize_table_pgstatDatabaseTable(void)
 {
-    const oid pgstatDatabaseTable_oid[] = {1,3,6,1,4,1,27645,3,1};
+    const oid pgstatDatabaseTable_oid[] = {1,3,6,1,4,1,27645,3,2};
     netsnmp_table_data_set *table_set;
     netsnmp_table_row *row;
 
