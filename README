@@ -67,6 +67,17 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
 Usage Samples
 -------------
 
+$ snmpwalk localhost pgstatServer
+PGSTAT-MIB::pgstatServerDatabaseCount.0 = INTEGER: 6
+PGSTAT-MIB::pgstatServerTotalSizeMB.0 = Gauge32: 77145528
+PGSTAT-MIB::pgstatServerTotalBackends.0 = Gauge32: 1
+PGSTAT-MIB::pgstatServerTotalCommits.0 = Counter32: 733954
+PGSTAT-MIB::pgstatServerTotalRollbacks.0 = Counter32: 8
+PGSTAT-MIB::pgstatServerTotalBlocksRead.0 = Counter32: 12042
+PGSTAT-MIB::pgstatServerTotalBlocksHit.0 = Counter32: 5653678
+PGSTAT-MIB::pgstatServerRollbackRatio.0 = Gauge32: 0
+PGSTAT-MIB::pgstatServerCacheHitRatio.0 = Gauge32: 9979
+
 $ snmpwalk localhost pgstatDatabase
 PGSTAT-MIB::pgstatDatabaseId.16385 = INTEGER: 16385
 PGSTAT-MIB::pgstatDatabaseId.31490 = INTEGER: 31490
@@ -152,7 +163,7 @@ PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = Counter32: 11347
 Status of Expected Sub-Trees
 ----------------------------
 
-pgstatServer: specified
+pgstatServer: DONE!
 
 pgstatDatabases: still need data caching
 

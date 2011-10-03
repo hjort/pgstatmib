@@ -5,6 +5,7 @@
 #include "pgstatmibd.h"
 #include <signal.h>
 
+#include <pgstatServer.h>
 #include <pgstatDatabaseTable.h>
 #include <pgstatBgWriter.h>
 
@@ -75,6 +76,7 @@ main (int argc, char **argv) {
 	}
 
   /* mib code */
+  init_pgstatServer();
   init_pgstatDatabaseTable();
   init_pgstatBgWriter();
 
