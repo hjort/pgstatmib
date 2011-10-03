@@ -7,8 +7,6 @@
 #include "pgstatmibd.h"
 #include "pgstatBgWriter.h"
 
-#include <net-snmp/agent/util_funcs.h>
-
 static oid pgstatBgWriter_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 10 };
 
 struct variable1 pgstatBgWriter_vars[] = {
@@ -30,8 +28,6 @@ init_pgstatBgWriter(void)
 
 static pgstatBgWriterData data;
 
-static time_t last = 0;		//for caching purposes
-
 /**
  * refresh numbers
  */
@@ -40,15 +36,13 @@ refresh_numbers(void) {
 	time_t now;
 	unsigned int diff;
 
+	// use cache on these numbers to prevent going to database so frequently
 	now = time (NULL);
+	diff = (now - data.last_load);
 
-	// TODO: cache these numbers to prevent going to database so frequently
-	
-	diff = (now - last);
-
-	if (last == 0 || diff >= PGSTATBGWRITER_CACHE_TIMEOUT) {
+	if (data.last_load == 0 || diff >= PGSTATBGWRITER_CACHE_TIMEOUT) {
 		load_numbers_from_db();
-		last = now;
+		data.last_load = now;
 	}
 }
 
@@ -59,7 +53,7 @@ void
 load_numbers_from_db(void) {
 	PGresult *res;
 
-    printf("load_numbers_from_db\n");
+    DEBUGMSGTL((PGSTATBGWRITER_NAME, "Loading numbers from DB\n"));
 
 	res = PQexec(dbconn, "\
 SELECT checkpoints_timed, checkpoints_req, \
@@ -94,12 +88,10 @@ getvalue(struct variable *vp,
 {
 
     DEBUGMSGTL((PGSTATBGWRITER_NAME, "getvalue(%d)\n", vp->magic));
-//	printf("getvalue(%d)\n", vp->magic);
 
     if (header_generic(vp, name, length, exact, var_len, write_method) == MATCH_FAILED)
         return NULL;
 
-	// TODO: make a better bound checking routine!
 	if (vp->magic >= PGSTATBGWRITER_FIRST && vp->magic <= PGSTATBGWRITER_LAST)
 		refresh_numbers();
 
@@ -124,4 +116,3 @@ getvalue(struct variable *vp,
 
     return NULL;
 }
-

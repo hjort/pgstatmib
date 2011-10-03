@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 /*
  * Local includes from PostgreSQL libpq
@@ -22,6 +23,7 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 #include <net-snmp/agent/mib_modules.h>
+#include <net-snmp/agent/util_funcs.h>
 
 //extern 
 PGconn *dbconn;

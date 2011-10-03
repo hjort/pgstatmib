@@ -20,9 +20,8 @@ typedef struct {
 	u_long maxwritten_clean;
 	u_long buffers_backend;
 	u_long buffers_alloc;
+	time_t last_load; // for caching control
 } pgstatBgWriterData;
-
-//config_require(util_funcs/header_generic)
 
 /* function declarations */
 void init_pgstatBgWriter(void);

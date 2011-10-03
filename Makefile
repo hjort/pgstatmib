@@ -51,8 +51,13 @@ pgstatmibd: $(OBJECTS)
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
-start-agent:
+agent-start:
 	sudo ./pgstatmibd
 
-test-client:
+client-test:
 	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgStatMIB
+
+test-cache:
+	while true; do echo "================================="; \
+	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgstatBgWriter; \
+	sleep 20; done
