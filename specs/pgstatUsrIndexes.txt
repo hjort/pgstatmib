@@ -1,0 +1,28 @@
+pgstatUsrIndexes
+================
+
+For each index on user tables in the current database, the table and index OID, schema, table and index name, number of index scans initiated on that index, number of index entries returned by index scans, and number of live table rows fetched by simple index scans using that index.
+
+SELECT i.relid, indexrelid, schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch,
+	pg_relation_size(indexrelid) as index_size,
+	((idx_scan / (SELECT t.idx_scan + 1e-5 FROM pg_stat_user_tables t WHERE t.relid = i.relid)) * 1e4)::int as usage_percent
+FROM pg_stat_user_indexes i
+ORDER BY schemaname, relname, indexrelname;
+
+bench=> \d+ pg_stat_user_indexes
+              Visão "pg_catalog.pg_stat_user_indexes"
+    Coluna     |  Tipo  | Modificadores | Armazenamento | Descrição 
+---------------+--------+---------------+---------------+-----------
+ relid         | oid    |               | plain         | 
+ indexrelid    | oid    |               | plain         | 
+ schemaname    | name   |               | plain         | 
+ relname       | name   |               | plain         | 
+ indexrelname  | name   |               | plain         | 
+ idx_scan      | bigint |               | plain         | 
+ idx_tup_read  | bigint |               | plain         | 
+ idx_tup_fetch | bigint |               | plain         | 
+Definição da visão:
+ SELECT pg_stat_all_indexes.relid, pg_stat_all_indexes.indexrelid, pg_stat_all_indexes.schemaname, pg_stat_all_indexes.relname, pg_stat_all_indexes.indexrelname, pg_stat_all_indexes.idx_scan, pg_stat_all_indexes.idx_tup_read, pg_stat_all_indexes.idx_tup_fetch
+   FROM pg_stat_all_indexes
+  WHERE (pg_stat_all_indexes.schemaname <> ALL (ARRAY['pg_catalog'::name, 'information_schema'::name])) AND pg_stat_all_indexes.schemaname !~ '^pg_toast'::text;
+

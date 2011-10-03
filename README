@@ -107,11 +107,13 @@ PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = INTEGER: 567
 Expected Sub-Entries
 --------------------
 
-pgstatDatabases
+pgstatServer: specified
+
+pgstatDatabases: still need data caching
 
 pgstatAllTables
 pgstatSysTables
-pgstatUsrTables
+pgstatUsrTables: specified
 
 pgstatIOAllTables
 pgstatIOSysTables
@@ -119,7 +121,7 @@ pgstatIOUsrTables
 
 pgstatAllIndexes
 pgstatSysIndexes
-pgstatUsrIndexes
+pgstatUsrIndexes: specified
 
 pgstatIOAllIndexes
 pgstatIOSysIndexes
@@ -130,7 +132,7 @@ pgstatIOSysSequences
 pgstatIOUsrSequences
 
 pgstatActivity
-pgstatBgWriter
+pgstatBgWriter: DONE!
 
 pgstatDatabaseConflicts
 pgstatReplication
