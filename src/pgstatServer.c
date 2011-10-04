@@ -11,7 +11,7 @@ static oid pgstatServer_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 1 };
 
 struct variable1 pgstatServer_vars[] = {
     {PGSTATSERVER_DATABASECOUNT, 	ASN_INTEGER, RONLY, getvalue_pgstatServer, 1, {1}},
-    {PGSTATSERVER_TOTALSIZEMB, 		ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {2}},
+    {PGSTATSERVER_TOTALSIZE, 		ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {2}},
     {PGSTATSERVER_TOTALBACKENDS, 	ASN_GAUGE, RONLY, getvalue_pgstatServer, 1, {3}},
     {PGSTATSERVER_TOTALCOMMITS, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {4}},
     {PGSTATSERVER_TOTALROLLBACKS, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {5}},
@@ -104,7 +104,7 @@ getvalue_pgstatServer(struct variable *vp,
     switch (vp->magic) {
     case PGSTATSERVER_DATABASECOUNT:
         return (u_char *) & pgstatServer_data.database_count;
-    case PGSTATSERVER_TOTALSIZEMB:
+    case PGSTATSERVER_TOTALSIZE:
         return (u_char *) & pgstatServer_data.total_size;
     case PGSTATSERVER_TOTALBACKENDS:
         return (u_char *) & pgstatServer_data.total_backends;

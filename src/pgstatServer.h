@@ -35,7 +35,7 @@ FindVarMethod   getvalue_pgstatServer;
 
 /* scalar number definitions */
 #define PGSTATSERVER_DATABASECOUNT		1
-#define PGSTATSERVER_TOTALSIZEMB		2
+#define PGSTATSERVER_TOTALSIZE			2
 #define PGSTATSERVER_TOTALBACKENDS		3
 #define PGSTATSERVER_TOTALCOMMITS		4
 #define PGSTATSERVER_TOTALROLLBACKS		5

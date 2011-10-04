@@ -16,7 +16,7 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
    +--pgstatServer(1)
    |  |
    |  +-- -R-- Integer32 pgstatServerDatabaseCount(1)
-   |  +-- -R-- Unsigned  pgstatServerTotalSizeMB(2)
+   |  +-- -R-- Unsigned  pgstatServerTotalSize(2)
    |  +-- -R-- Gauge     pgstatServerTotalBackends(3)
    |  +-- -R-- Counter   pgstatServerTotalCommits(4)
    |  +-- -R-- Counter   pgstatServerTotalRollbacks(5)
@@ -73,7 +73,7 @@ PGSTAT-MIB::pgstatServerCacheHitRatio.0 = Gauge32: 9979
 
 $ snmpwalk localhost pgstatServer
 PGSTAT-MIB::pgstatServerDatabaseCount.0 = INTEGER: 6
-PGSTAT-MIB::pgstatServerTotalSizeMB.0 = Gauge32: 77145528
+PGSTAT-MIB::pgstatServerTotalSize.0 = Gauge32: 77145528
 PGSTAT-MIB::pgstatServerTotalBackends.0 = Gauge32: 1
 PGSTAT-MIB::pgstatServerTotalCommits.0 = Counter32: 733954
 PGSTAT-MIB::pgstatServerTotalRollbacks.0 = Counter32: 8
@@ -107,8 +107,8 @@ PGSTAT-MIB::pgstatDatabaseTuplesUpdated.16385 = Counter32: 0
 PGSTAT-MIB::pgstatDatabaseTuplesUpdated.31490 = Counter32: 82903
 PGSTAT-MIB::pgstatDatabaseTuplesDeleted.16385 = Counter32: 0
 PGSTAT-MIB::pgstatDatabaseTuplesDeleted.31490 = Counter32: 0
-PGSTAT-MIB::pgstatDatabaseSizeMB.16385 = Gauge32: 5407012
-PGSTAT-MIB::pgstatDatabaseSizeMB.31490 = Gauge32: 42672420
+PGSTAT-MIB::pgstatDatabaseSize.16385 = Gauge32: 5407012
+PGSTAT-MIB::pgstatDatabaseSize.31490 = Gauge32: 42672420
 PGSTAT-MIB::pgstatDatabaseRollbackRatio.16385 = Gauge32: 0
 PGSTAT-MIB::pgstatDatabaseRollbackRatio.31490 = Gauge32: 2
 PGSTAT-MIB::pgstatDatabaseCacheHitRatio.16385 = Gauge32: 9954
@@ -127,7 +127,7 @@ SNMP table: PGSTAT-MIB::pgstatDatabaseTable
 
 Id              Name            Backends        Commits         Rollbacks       
 BlocksRead      BlocksHit       TuplesReturned  TuplesFetched   TuplesInserted  
-TuplesUpdated   TuplesDeleted   SizeMB          RollbackRatio   CacheHitRatio   
+TuplesUpdated   TuplesDeleted   Size            RollbackRatio   CacheHitRatio   
 TuplesModified  
 
 index: [11564]
