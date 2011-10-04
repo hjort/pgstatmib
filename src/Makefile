@@ -55,9 +55,9 @@ agent-start:
 	sudo ./pgstatmibd
 
 client-test:
-	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgStatMIB
+	MIBDIRS="+.." MIBS=ALL snmpwalk localhost pgStatMIB
 
 test-cache:
 	while true; do echo "================================="; \
-	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgstatBgWriter; \
+	MIBDIRS="+.." MIBS=ALL snmpwalk localhost pgstatBgWriter; \
 	sleep 20; done
