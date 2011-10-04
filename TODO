@@ -4,3 +4,4 @@ TODO list:
 - implement caches when retrieving values from DB (see: man netsnmp_cache_handler)
 - make all scalar and table objects read only (use MIB group creation example)
 - remove unecessary handlers on SNMP tables
+- use 1 DB connection to "postgres" and 1 for each specific DB (use hashes on PGConnection)
