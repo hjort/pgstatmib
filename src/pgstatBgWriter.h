@@ -20,17 +20,16 @@ typedef struct {
 	u_long maxwritten_clean;
 	u_long buffers_backend;
 	u_long buffers_alloc;
+	time_t last_load; // for caching control
 } pgstatBgWriterData;
 
-//config_require(util_funcs/header_generic)
-
 /* function declarations */
-void init_pgstatBgWriter(void);
-void refresh_numbers(void);
-void load_numbers_from_db(void);
-FindVarMethod getvalue;
+void 			init_pgstatBgWriter(void);
+void 			refresh_numbers_pgstatBgWriter(void);
+void 			load_numbers_from_db_pgstatBgWriter(void);
+FindVarMethod	getvalue_pgstatBgWriter;
 
-/* scalar number definitions for pgstatBgWriter */
+/* scalar number definitions */
 #define PGSTATBGWRITER_CHECKPOINTSTIMED			1
 #define PGSTATBGWRITER_CHECKPOINTSREQUESTED		2
 #define PGSTATBGWRITER_BUFFERSCHECKPOINT		3
@@ -43,3 +42,4 @@ FindVarMethod getvalue;
 #define PGSTATBGWRITER_LAST		PGSTATBGWRITER_BUFFERSALLOCATED
 
 #endif /* PGSTATBGWRITER_H */
+

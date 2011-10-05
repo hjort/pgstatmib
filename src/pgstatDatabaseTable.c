@@ -11,7 +11,7 @@
 void
 initialize_table_pgstatDatabaseTable(void)
 {
-    const oid pgstatDatabaseTable_oid[] = {1,3,6,1,4,1,27645,3,1};
+    const oid pgstatDatabaseTable_oid[] = {1,3,6,1,4,1,27645,3,2};
     netsnmp_table_data_set *table_set;
     netsnmp_table_row *row;
 
@@ -60,7 +60,7 @@ initialize_table_pgstatDatabaseTable(void)
             COLUMN_PGSTATDATABASETUPLESINSERTED, ASN_COUNTER, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESUPDATED, ASN_COUNTER, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, 0, NULL, 0,
-            COLUMN_PGSTATDATABASESIZEMB, ASN_UNSIGNED, 0, NULL, 0,
+            COLUMN_PGSTATDATABASESIZE, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASECACHEHITRATIO, ASN_UNSIGNED, 0, NULL, 0,
             COLUMN_PGSTATDATABASETUPLESMODIFIED, ASN_COUNTER, 0, NULL, 0,
@@ -159,7 +159,7 @@ ORDER BY datid");
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASETUPLESDELETED, ASN_COUNTER, (char *) &tup_deleted, sizeof(tup_deleted));
 
 		database_size = atoi(PQgetvalue(res, i, 12));
-		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASESIZEMB, ASN_UNSIGNED, (char *) &database_size, sizeof(database_size));
+		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASESIZE, ASN_UNSIGNED, (char *) &database_size, sizeof(database_size));
 
 		rollback_ratio = atoi(PQgetvalue(res, i, 13));
 		netsnmp_set_row_column(row, COLUMN_PGSTATDATABASEROLLBACKRATIO, ASN_UNSIGNED, (char *) &rollback_ratio, sizeof(rollback_ratio));

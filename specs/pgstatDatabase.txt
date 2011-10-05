@@ -30,7 +30,7 @@ pgstatDatabaseTuplesInserted	1.3.6.1.4.1.27645.3.1.10	tup_inserted	211416
 pgstatDatabaseTuplesUpdated	1.3.6.1.4.1.27645.3.1.11	tup_updated	33633
 pgstatDatabaseTuplesDeleted	1.3.6.1.4.1.27645.3.1.12	tup_deleted	94
 .............................................................................................................
-pgstatDatabaseSizeMB		1.3.6.1.4.1.27645.3.1.13	pg_database_size(datid)
+pgstatDatabaseSize		1.3.6.1.4.1.27645.3.1.13	pg_database_size(datid)
 pgstatDatabaseRollbackRatio	1.3.6.1.4.1.27645.3.1.14	xact_rollback / (xact_commit + xact_rollback)
 pgstatDatabaseCacheHitRatio	1.3.6.1.4.1.27645.3.1.15	blks_hit / (blks_hit + blks_read)
 pgstatDatabaseTuplesModified	1.3.6.1.4.1.27645.3.1.16	tup_inserted + tup_updated + tup_deleted
