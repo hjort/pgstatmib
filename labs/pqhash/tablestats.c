@@ -43,6 +43,7 @@ find_database (int datid)
 {
   DBconn *db;
   HASH_FIND_INT (databases, &datid, db);	/* db: output pointer */
+  fprintf (stdout, "find_database(%d) = %d\n", datid, (int) db);
   return db;
 }
 
@@ -51,6 +52,8 @@ start_connection (DBconn * db)
 {
   char *conninfo;
   PGconn *conn;
+
+  fprintf (stdout, "start_connection(%d)\n", (int) db);
 
   if (!db->conn)
     {
@@ -100,6 +103,8 @@ show_table_stats (int datid, int filter)
   int nFields, i, j;
   char sql[50];
 
+  fprintf (stdout, "show_table_stats(%d, %d)\n", datid, filter);
+
   db = find_database (datid);
   if (db && db->conn)
     {
@@ -113,8 +118,9 @@ show_table_stats (int datid, int filter)
 		strcat(sql, "all");
 	strcat(sql, "_tables");
 
-      res =
-	PQexec (db->conn, sql);
+  fprintf (stdout, "conn: %d, sql: %s\n", (int) db->conn, sql);
+
+      res =	PQexec (db->conn, sql);
       if (PQresultStatus (res) != PGRES_TUPLES_OK)
 	{
 	  fprintf (stderr, "SELECT command failed: %s",
@@ -178,7 +184,7 @@ main (int argc, char **argv)
       exit_nicely (conn);
     }
 
-  res = PQexec (conn, "SELECT datid, datname FROM pg_database");
+  res = PQexec (conn, "SELECT oid, datname FROM pg_database ORDER BY oid");
   if (PQresultStatus (res) != PGRES_TUPLES_OK)
     {
       fprintf (stderr, "SELECT command failed: %s", PQerrorMessage (conn));
@@ -210,11 +216,12 @@ main (int argc, char **argv)
   sort_by_name ();
   for (db = databases; db != NULL; db = (DBconn *) (db->hh.next))
     {
-      printf ("database id %d: name %s\n", db->id, db->name);
+
+      printf ("database id: %d, name: %s\n", db->id, db->name);
 
       // TODO: call find_database() somewhere
 
-      start_connection (db);
+      start_connection (&db);
 
 	printf("user tables:\n");
       show_table_stats (db->id, USER_TABLES);
