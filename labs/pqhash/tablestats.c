@@ -90,6 +90,7 @@ release_connection (DBconn * db)
 int
 remove_database (DBconn * db)
 {
+  fprintf (stdout, "remove_database(%d)\n", (int) db);
   release_connection (db);
   HASH_DEL (databases, db);
   free (db);
@@ -127,12 +128,15 @@ show_table_stats (int datid, int filter)
       fprintf (stdout, "conn: %d, sql: %s\n", (int) db->conn, sql);
 
       res = PQexec (db->conn, sql);
+	printf("hehehe\n");
       if (PQresultStatus (res) != PGRES_TUPLES_OK)
 	{
 	  fprintf (stderr, "SELECT command failed: %s",
 		   PQerrorMessage (db->conn));
 	  PQclear (res);
 	  //exit_nicely(conn);
+	  // FIXME: should not let go from this point on...
+	  printf("SELECT command failed: %s", PQerrorMessage (db->conn));
 	}
 
       nFields = PQnfields (res);
@@ -182,6 +186,8 @@ main (int argc, char **argv)
   /* Make a connection to the database */
   conn = PQconnectdb (conninfo);
 
+printf("conn = %d\n", (int) conn);
+
   /* Check to see that the backend connection was successfully made */
   if (PQstatus (conn) != CONNECTION_OK)
     {
@@ -192,7 +198,7 @@ main (int argc, char **argv)
 
   res =
     PQexec (conn,
-	    "SELECT oid, datname FROM pg_database WHERE datname !~ '^template' ORDER BY oid");
+	    "SELECT oid, datname FROM pg_database WHERE datname !~ '^template' and ORDER BY oid");
   if (PQresultStatus (res) != PGRES_TUPLES_OK)
     {
       fprintf (stderr, "SELECT command failed: %s", PQerrorMessage (conn));
