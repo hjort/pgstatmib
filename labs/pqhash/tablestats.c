@@ -8,9 +8,7 @@ typedef struct db_struct
 {
   int id;			/* key */
   char name[10];
-
   PGconn *conn;
-
   UT_hash_handle hh;		/* makes this structure hashable */
 } DBconn;
 
@@ -61,9 +59,7 @@ start_connection(DBconn * db)
   if (!db->conn)
   {
     sprintf(conninfo, "dbname=%s user=%s", db->name, "postgres");
-//printf("conninfo = %s\n", conninfo);
     conn = PQconnectdb(conninfo);
-//printf("conn = %d\n", (int) conn);
     if (PQstatus(conn) != CONNECTION_OK)
     {
       fprintf(stderr, "Connection to database %s failed: %s",
@@ -152,8 +148,8 @@ show_table_stats(int datid, int filter)
 		printf("%-20s", PQgetvalue(res, i, j));
       printf("\n");
     }
-    PQclear(res);
 
+    PQclear(res);
   }
 }
 
@@ -188,8 +184,6 @@ main(int argc, char **argv)
   /* Make a connection to the database */
   conn = PQconnectdb(conninfo);
 
-  //printf("conn = %d\n", (int) conn);
-
   /* Check to see that the backend connection was successfully made */
   if (PQstatus(conn) != CONNECTION_OK)
   {
@@ -208,8 +202,8 @@ main(int argc, char **argv)
     exit_nicely(conn);
   }
 
-  nFields = PQnfields(res);
-  /*for (i = 0; i < nFields; i++)
+  /*nFields = PQnfields(res);
+  for (i = 0; i < nFields; i++)
      printf("%-15s", PQfname(res, i));
      printf("\n\n"); */
 
@@ -236,10 +230,10 @@ main(int argc, char **argv)
 
     start_connection(db);
 
-//      printf("user tables:\n");
+//    printf("user tables:\n");
     show_table_stats(db->id, USER_TABLES);
 
-//      printf("system tables:\n");
+//    printf("system tables:\n");
     show_table_stats(db->id, SYSTEM_TABLES);
   }
   printf("\n");
