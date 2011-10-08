@@ -43,22 +43,26 @@ find_database (int datid)
 {
   DBconn *db;
   HASH_FIND_INT (databases, &datid, db);	/* db: output pointer */
-  fprintf (stdout, "find_database(%d) = %d\n", datid, (int) db);
+//  fprintf (stdout, "find_database(%d) = %d\n", datid, (int) db);
   return db;
 }
 
 int
 start_connection (DBconn * db)
 {
-  char *conninfo;
+  char conninfo[255];
   PGconn *conn;
 
-  fprintf (stdout, "start_connection(%d)\n", (int) db);
+//  fprintf (stdout, "start_connection(%d)\n", (int) db);
+
+//printf("db = %d, db->conn = %d, db->name = %s\n", (int) db, (int) db->conn, db->name);
 
   if (!db->conn)
     {
-      sprintf ("dbname=%s username=postgres", db->name, conninfo);
+      sprintf (conninfo, "dbname=%s user=%s", db->name, "postgres");
+//printf("conninfo = %s\n", conninfo);
       conn = PQconnectdb (conninfo);
+//printf("conn = %d\n", (int) conn);
       if (PQstatus (conn) != CONNECTION_OK)
 	{
 	  fprintf (stderr, "Connection to database %s failed: %s",
@@ -75,6 +79,7 @@ start_connection (DBconn * db)
 int
 release_connection (DBconn * db)
 {
+  fprintf (stdout, "release_connection(%d)\n", (int) db);
   if (db->conn)
     {
       PQfinish (db->conn);
@@ -101,26 +106,27 @@ show_table_stats (int datid, int filter)
   DBconn *db;
   PGresult *res;
   int nFields, i, j;
-  char sql[50];
+  char sql[100];
 
-  fprintf (stdout, "show_table_stats(%d, %d)\n", datid, filter);
+  //fprintf (stdout, "show_table_stats(%d, %d)\n", datid, filter);
 
   db = find_database (datid);
   if (db && db->conn)
     {
 
-	strcpy(sql, "SELECT * FROM pg_stat_");
-	if (filter == USER_TABLES)
-		strcat(sql, "user");
-	else if (filter == SYSTEM_TABLES)
-		strcat(sql, "sys");
-	else
-		strcat(sql, "all");
-	strcat(sql, "_tables");
+      strcpy (sql, "SELECT relid, relname, seq_scan, idx_scan FROM pg_stat_");
+      if (filter == USER_TABLES)
+	strcat (sql, "user");
+      else if (filter == SYSTEM_TABLES)
+	strcat (sql, "sys");
+      else
+	strcat (sql, "all");
+      strcat (sql, "_tables");
+      strcat (sql, " LIMIT 5");
 
-  fprintf (stdout, "conn: %d, sql: %s\n", (int) db->conn, sql);
+      fprintf (stdout, "conn: %d, sql: %s\n", (int) db->conn, sql);
 
-      res =	PQexec (db->conn, sql);
+      res = PQexec (db->conn, sql);
       if (PQresultStatus (res) != PGRES_TUPLES_OK)
 	{
 	  fprintf (stderr, "SELECT command failed: %s",
@@ -131,13 +137,13 @@ show_table_stats (int datid, int filter)
 
       nFields = PQnfields (res);
       for (i = 0; i < nFields; i++)
-	printf ("%-15s", PQfname (res, i));
-      printf ("\n\n");
+	printf ("%-20s", PQfname (res, i));
+      printf ("\n");
 
       for (i = 0; i < PQntuples (res); i++)
 	{
 	  for (j = 0; j < nFields; j++)
-	    printf ("%-15s", PQgetvalue (res, i, j));
+	    printf ("%-20s", PQgetvalue (res, i, j));
 	  printf ("\n");
 	}
       PQclear (res);
@@ -184,7 +190,9 @@ main (int argc, char **argv)
       exit_nicely (conn);
     }
 
-  res = PQexec (conn, "SELECT oid, datname FROM pg_database ORDER BY oid");
+  res =
+    PQexec (conn,
+	    "SELECT oid, datname FROM pg_database WHERE datname !~ '^template' ORDER BY oid");
   if (PQresultStatus (res) != PGRES_TUPLES_OK)
     {
       fprintf (stderr, "SELECT command failed: %s", PQerrorMessage (conn));
@@ -199,9 +207,9 @@ main (int argc, char **argv)
 
   for (i = 0; i < PQntuples (res); i++)
     {
-      for (j = 0; j < nFields; j++)
-	printf ("%-15s", PQgetvalue (res, i, j));
-      printf ("\n");
+      /*for (j = 0; j < nFields; j++)
+         printf ("%-15s", PQgetvalue (res, i, j));
+         printf ("\n"); */
 
       datid = atoi (PQgetvalue (res, i, 0));
       datname = PQgetvalue (res, i, 1);
@@ -217,17 +225,17 @@ main (int argc, char **argv)
   for (db = databases; db != NULL; db = (DBconn *) (db->hh.next))
     {
 
-      printf ("database id: %d, name: %s\n", db->id, db->name);
+      printf ("\ndatabase id: %d, name: %s\n", db->id, db->name);
 
       // TODO: call find_database() somewhere
 
-      start_connection (&db);
+      start_connection (db);
 
-	printf("user tables:\n");
+//      printf("user tables:\n");
       show_table_stats (db->id, USER_TABLES);
 
-	printf("system tables:\n");
-      show_table_stats (db->id, SYSTEM_TABLES);
+//      printf("system tables:\n");
+      //    show_table_stats (db->id, SYSTEM_TABLES);
     }
 
   // free resources
