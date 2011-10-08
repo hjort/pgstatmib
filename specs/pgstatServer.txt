@@ -1,0 +1,27 @@
+pgstatServer
+============
+
+SELECT count(datid) as database_count,
+	sum(pg_database_size(datid)) as total_size, sum(numbackends) as total_backends,
+	sum(xact_commit) as total_commits, sum(xact_rollback) as total_rollbacks,
+	sum(blks_read) as total_blks_read, sum(blks_hit) as total_blks_hit,
+	(sum(xact_rollback) / sum(xact_commit + xact_rollback) * 1e4)::int as rollback_ratio,
+	(sum(blks_hit) / sum(blks_read + blks_hit) * 1e4)::int as cache_hit_ratio
+FROM pg_stat_database;
+
+ database_count | total_size | total_backends | total_commits | total_rollbacks | total_blks_read | total_blks_hit | rollback_ratio | cache_hit_ratio 
+----------------+------------+----------------+---------------+-----------------+-----------------+----------------+----------------+-----------------
+              6 |   77145528 |              1 |        733255 |               8 |           12035 |        5638519 |              0 |            9979
+(1 registro)
+
+-[ RECORD 1 ]---+---------
+database_count  | 6
+total_size      | 77145528
+total_backends  | 1
+total_commits   | 733257
+total_rollbacks | 8
+total_blks_read | 12035
+total_blks_hit  | 5638550
+rollback_ratio  | 0
+cache_hit_ratio | 9979
+

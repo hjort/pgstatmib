@@ -1,0 +1,38 @@
+pgstatUsrTables
+===============
+
+For each user table in the current database (including TOAST tables), the table OID, schema and table name, number of sequential scans initiated, number of live rows fetched by sequential scans, number of index scans initiated (over all indexes belonging to the table), number of live rows fetched by index scans, numbers of row insertions, updates, and deletions, number of row updates that were HOT (i.e., no separate index update), numbers of live and dead rows, the last time the table was non-FULL vacuumed manually, the last time it was vacuumed by the autovacuum daemon, the last time it was analyzed manually, the last time it was analyzed by the autovacuum daemon, number of times it has been non-FULL vacuumed manually, number of times it has been vacuumed by the autovacuum daemon, number of times it has been analyzed manually, and the number of times it has been analyzed by the autovacuum daemon.
+
+SELECT relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch,
+    -- ...
+	pg_relation_size(relid) as table_size,
+	pg_total_relation_size(relid) as total_table_size,
+	(idx_scan / (seq_scan + idx_scan + 1e-5) * 1e4)::int as idx_scan_ratio
+FROM pg_stat_user_tables
+ORDER BY schemaname, relname;
+
+                         Visão "pg_catalog.pg_stat_user_tables"
+      Coluna      |           Tipo           | Modificadores | Armazenamento | Descrição 
+------------------+--------------------------+---------------+---------------+-----------
+ relid            | oid                      |               | plain         | 
+ schemaname       | name                     |               | plain         | 
+ relname          | name                     |               | plain         | 
+ seq_scan         | bigint                   |               | plain         | 
+ seq_tup_read     | bigint                   |               | plain         | 
+ idx_scan         | bigint                   |               | plain         | 
+ idx_tup_fetch    | bigint                   |               | plain         | 
+ n_tup_ins        | bigint                   |               | plain         | 
+ n_tup_upd        | bigint                   |               | plain         | 
+ n_tup_del        | bigint                   |               | plain         | 
+ n_tup_hot_upd    | bigint                   |               | plain         | 
+ n_live_tup       | bigint                   |               | plain         | 
+ n_dead_tup       | bigint                   |               | plain         | 
+ last_vacuum      | timestamp with time zone |               | plain         | 
+ last_autovacuum  | timestamp with time zone |               | plain         | 
+ last_analyze     | timestamp with time zone |               | plain         | 
+ last_autoanalyze | timestamp with time zone |               | plain         | 
+Definição da visão:
+ SELECT pg_stat_all_tables.relid, pg_stat_all_tables.schemaname, pg_stat_all_tables.relname, pg_stat_all_tables.seq_scan, pg_stat_all_tables.seq_tup_read, pg_stat_all_tables.idx_scan, pg_stat_all_tables.idx_tup_fetch, pg_stat_all_tables.n_tup_ins, pg_stat_all_tables.n_tup_upd, pg_stat_all_tables.n_tup_del, pg_stat_all_tables.n_tup_hot_upd, pg_stat_all_tables.n_live_tup, pg_stat_all_tables.n_dead_tup, pg_stat_all_tables.last_vacuum, pg_stat_all_tables.last_autovacuum, pg_stat_all_tables.last_analyze, pg_stat_all_tables.last_autoanalyze
+   FROM pg_stat_all_tables
+  WHERE (pg_stat_all_tables.schemaname <> ALL (ARRAY['pg_catalog'::name, 'information_schema'::name])) AND pg_stat_all_tables.schemaname !~ '^pg_toast'::text;
+

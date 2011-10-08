@@ -10,10 +10,10 @@
 CC = gcc
 GCC = yes
 
-OBJECTS = pgstatmibd.o pgstatDatabaseTable.o pgstatBgWriter.o
+OBJECTS = pgstatmibd.o pgstatServer.o pgstatDatabaseTable.o pgstatBgWriter.o
 TARGETS = pgstatmibd
 
-CFLAGS = -I. `net-snmp-config --cflags` `pg_config --cflags`
+CFLAGS = -I. `net-snmp-config --cflags` `pg_config --cflags` -Wall
 BUILDLIBS = `net-snmp-config --libs` `pg_config --libs`
 BUILDAGENTLIBS = `net-snmp-config --agent-libs`
 
@@ -51,8 +51,13 @@ pgstatmibd: $(OBJECTS)
 clean:
 	rm $(OBJECTS) $(TARGETS)
 
-start-agent:
+agent-start:
 	sudo ./pgstatmibd
 
-test-client:
-	MIBDIRS="+." MIBS=ALL snmpwalk localhost pgStatMIB
+client-test:
+	MIBDIRS="+.." MIBS=ALL snmpwalk localhost pgStatMIB
+
+test-cache:
+	while true; do echo "================================="; \
+	MIBDIRS="+.." MIBS=ALL snmpwalk localhost pgstatBgWriter; \
+	sleep 20; done
