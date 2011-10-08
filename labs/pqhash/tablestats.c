@@ -23,6 +23,7 @@ add_database(int datid, char *datname)
   db = (DBconn *) malloc(sizeof(DBconn));
   db->id = datid;
   strcpy(db->name, datname);
+  db->conn = NULL;
   HASH_ADD_INT(databases, id, db);	/* id: name of key field */
 }
 
@@ -43,7 +44,7 @@ find_database(int datid)
 {
   DBconn *db;
   HASH_FIND_INT(databases, &datid, db);	/* db: output pointer */
-  fprintf (stdout, "find_database(%d) = %d\n", datid, (int) db);
+  fprintf(stdout, "find_database(%d) = %d\n", datid, (int) db);
   return db;
 }
 
@@ -53,7 +54,7 @@ start_connection(DBconn * db)
   char conninfo[255];
   PGconn *conn;
 
-  fprintf (stdout, "start_connection(%d)\n", (int) db);
+  fprintf(stdout, "start_connection(%d)\n", (int) db);
 
 //printf("db = %d, db->conn = %d, db->name = %s\n", (int) db, (int) db->conn, db->name);
 
@@ -90,7 +91,7 @@ release_connection(DBconn * db)
 int
 remove_database(DBconn * db)
 {
-  fprintf(stdout, "remove_database(%d)\n", (int) db);
+//  fprintf(stdout, "remove_database(%d)\n", (int) db);
   release_connection(db);
   HASH_DEL(databases, db);
   free(db);
@@ -127,10 +128,9 @@ show_table_stats(int datid, int filter)
 
 //    fprintf(stdout, "conn: %d, sql: %s\n", (int) db->conn, sql);
 
-    printf("status: %d, db: %s\n", PQstatus(db->conn), "PQdb(db->conn)");
+//    printf("status: %d, db: %s\n", PQstatus(db->conn), PQdb(db->conn));
 
     res = PQexec(db->conn, sql);
-    printf("hehehe\n");
 
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
     {
@@ -188,7 +188,7 @@ main(int argc, char **argv)
   /* Make a connection to the database */
   conn = PQconnectdb(conninfo);
 
-  printf("conn = %d\n", (int) conn);
+  //printf("conn = %d\n", (int) conn);
 
   /* Check to see that the backend connection was successfully made */
   if (PQstatus(conn) != CONNECTION_OK)
@@ -215,9 +215,9 @@ main(int argc, char **argv)
 
   for (i = 0; i < PQntuples(res); i++)
   {
-    for (j = 0; j < nFields; j++)
-       printf ("%-15s", PQgetvalue (res, i, j));
-       printf ("\n");
+    /*for (j = 0; j < nFields; j++)
+      printf("%-15s", PQgetvalue(res, i, j));
+    printf("\n");*/
 
     datid = atoi(PQgetvalue(res, i, 0));
     datname = PQgetvalue(res, i, 1);
@@ -228,30 +228,23 @@ main(int argc, char **argv)
   /* close the connection to the database and cleanup */
   PQfinish(conn);
 
-  for (db = databases; db != NULL; db = (DBconn *) (db->hh.next))
-  {
-    start_connection(db);
-  }
-
   // loop through all databases
   sort_by_name();
   for (db = databases; db != NULL; db = (DBconn *) (db->hh.next))
   {
-
     printf("\ndatabase id: %d, name: %s\n", db->id, db->name);
 
-    // TODO: call find_database() somewhere
-
-//    start_connection(db);
+    start_connection(db);
 
 //      printf("user tables:\n");
     show_table_stats(db->id, USER_TABLES);
 
 //      printf("system tables:\n");
-    show_table_stats (db->id, SYSTEM_TABLES);
+    show_table_stats(db->id, SYSTEM_TABLES);
   }
+  printf("\n");
 
-// free resources
+  // free resources
   while (databases)
   {
     db = databases;

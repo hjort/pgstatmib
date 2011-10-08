@@ -1,0 +1,76 @@
+
+database id: 31983, name: bench
+start_connection(153778808)
+find_database(31983) = 153778808
+relid               relname             seq_scan            idx_scan            
+31993               pgbench_history     0                                       
+31990               pgbench_accounts    1                   1000                
+31984               pgbench_branches    1001                0                   
+31987               pgbench_tellers     945                 0                   
+find_database(31983) = 153778808
+relid               relname             seq_scan            idx_scan            
+2617                pg_operator         0                   216                 
+1261                pg_auth_members     0                   0                   
+2600                pg_aggregate        0                   2                   
+1136                pg_pltemplate       0                   0                   
+2614                pg_listener         0                                       
+
+database id: 30919, name: curso
+start_connection(153778752)
+find_database(30919) = 153778752
+relid               relname             seq_scan            idx_scan            
+30920               municipios          2                   0                   
+find_database(30919) = 153778752
+relid               relname             seq_scan            idx_scan            
+2617                pg_operator         0                   480                 
+1261                pg_auth_members     0                   0                   
+2600                pg_aggregate        0                   48                  
+1136                pg_pltemplate       0                   0                   
+2614                pg_listener         0                                       
+
+database id: 11564, name: postgres
+start_connection(153775184)
+find_database(11564) = 153775184
+relid               relname             seq_scan            idx_scan            
+find_database(11564) = 153775184
+relid               relname             seq_scan            idx_scan            
+2617                pg_operator         0                   744                 
+1261                pg_auth_members     0                   0                   
+2600                pg_aggregate        0                   4                   
+1136                pg_pltemplate       0                   0                   
+2614                pg_listener         0                                       
+
+database id: 30918, name: rodrigo
+start_connection(153778696)
+find_database(30918) = 153778696
+relid               relname             seq_scan            idx_scan            
+find_database(30918) = 153778696
+relid               relname             seq_scan            idx_scan            
+2617                pg_operator         0                   72                  
+1261                pg_auth_members     0                   0                   
+2600                pg_aggregate        0                   6                   
+1136                pg_pltemplate       0                   0                   
+2614                pg_listener         0                                       
+
+database id: 16385, name: zabbix
+start_connection(153769808)
+find_database(16385) = 153769808
+relid               relname             seq_scan            idx_scan            
+17096               profiles            0                   0                   
+17397               usrgrp              0                   0                   
+16423               applications        0                   0                   
+17147               regexps             0                   0                   
+16454               conditions          0                   0                   
+find_database(16385) = 153769808
+relid               relname             seq_scan            idx_scan            
+2614                pg_listener         0                                       
+2612                pg_language         0                   0                   
+11472               sql_sizing          0                                       
+16834               pg_toast_16804      0                   0                   
+17152               pg_toast_17147      0                   0                   
+
+release_connection(153778808)
+release_connection(153778752)
+release_connection(153775184)
+release_connection(153778696)
+release_connection(153769808)
