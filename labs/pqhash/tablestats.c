@@ -4,7 +4,7 @@
 #include <libpq-fe.h>
 #include <uthash.h>
 
-typedef struct db_struct
+typedef struct
 {
   int id;			/* key */
   char name[10];
