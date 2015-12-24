@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 
 	ndbs = 3; // this value may vary
 
-	conns = malloc(ndbs * sizeof(*conns));
+	conns = malloc(ndbs * sizeof(PGconn*));
 	//memset(conns, 0, sizeof(conns));
 
 	// instantiate connections

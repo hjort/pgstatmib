@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include "libpq-fe.h"
 #include <pthread.h>
+#include "libpq-fe.h"
 
 #define MAX_DATABASES 20
 #define MAX_NAME_LENGTH 50
@@ -12,7 +11,8 @@
 void *run(void *);
 
 char dbnames[MAX_DATABASES][MAX_NAME_LENGTH];
-PGconn *conns[MAX_DATABASES];
+PGconn **conns;
+//PGconn *conns[MAX_DATABASES];
 pthread_mutex_t lock[MAX_DATABASES];
 
 int
@@ -25,7 +25,7 @@ main(int argc, char **argv)
 	pthread_t thread[MAX_DATABASES][MAX_SQL_THREADS];
 
 	memset(dbnames, 0, sizeof(dbnames));
-	memset(conns, 0, sizeof(conns));
+	//memset(conns, 0, sizeof(conns));
 
 	// 1. connect to 'template1' database
 	strcpy(conninfo, "dbname=template1");
@@ -55,6 +55,7 @@ main(int argc, char **argv)
 	PQclear(res);
 
 	// 3. make a connection to each database
+	conns = malloc(ndbs * sizeof(PGconn*));
 	fprintf(stdout, "Making connections:\n");
 	for (i = 0; i < ndbs; i++) {
 		strcpy(conninfo, "dbname=");
@@ -104,8 +105,9 @@ main(int argc, char **argv)
 		fprintf(stdout, "%d) %p\n", i + 1, conns[i]);
 		if (conns[i])
 			PQfinish(conns[i]);
-		conns[i] = NULL;
+		//conns[i] = NULL;
 	}
+	free(conns);
 
 	PQfinish(conn);
 
