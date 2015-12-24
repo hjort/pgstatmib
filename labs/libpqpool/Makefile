@@ -19,7 +19,7 @@ CPPFLAGS += -I$(PG9SRC)/interfaces/libpq -I$(PG9SRC)/include
 #LDLIBS += -L/usr/local/pgsql/lib -lpq
 LDLIBS += -L$(PG9SRC)/interfaces/libpq -lpq -lpthread
 
-PROGS = tt tt2 pq1 pqt ts1 ts2 pqta
+PROGS = tt tt2 pq1 pqt ts1 ts2 pqta pqc
 
 all: $(PROGS)
 
