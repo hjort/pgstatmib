@@ -12,8 +12,7 @@ void *run(void *);
 
 char dbnames[MAX_DATABASES][MAX_NAME_LENGTH];
 PGconn **conns;
-//PGconn *conns[MAX_DATABASES];
-pthread_mutex_t lock[MAX_DATABASES];
+pthread_mutex_t *locks;
 
 int
 main(int argc, char **argv)
@@ -25,7 +24,6 @@ main(int argc, char **argv)
 	pthread_t thread[MAX_DATABASES][MAX_SQL_THREADS];
 
 	memset(dbnames, 0, sizeof(dbnames));
-	//memset(conns, 0, sizeof(conns));
 
 	// 1. connect to 'template1' database
 	strcpy(conninfo, "dbname=template1");
@@ -73,9 +71,13 @@ main(int argc, char **argv)
 	}
 
 	fprintf(stdout, "Initializing mutexes:\n");
+	locks = malloc(ndbs * sizeof(pthread_mutex_t));
 	for (i = 0; i < ndbs; i++) {
-		if (pthread_mutex_init(&lock[i], NULL) != 0)
+		if (pthread_mutex_init(&locks[i], NULL) != 0) {
 			fprintf(stderr, "%d) Mutex init failed\n", i + 1);
+		} else {
+			//fprintf(stdout, "%d) %p\n", i + 1, locks[i]);
+		}
 	}
 
 	fprintf(stdout, "Creating threads:\n");
@@ -96,8 +98,10 @@ main(int argc, char **argv)
 
 	fprintf(stdout, "Destroying mutexes:\n");
 	for (i = 0; i < ndbs; i++) {
-		pthread_mutex_destroy(&lock[i]);
+		//fprintf(stdout, "%d) %p\n", i + 1, locks[i]);
+		pthread_mutex_destroy(&locks[i]);
 	}
+	free(locks);
 
 	// free the connections
 	fprintf(stdout, "Releasing connections:\n");
@@ -105,7 +109,6 @@ main(int argc, char **argv)
 		fprintf(stdout, "%d) %p\n", i + 1, conns[i]);
 		if (conns[i])
 			PQfinish(conns[i]);
-		//conns[i] = NULL;
 	}
 	free(conns);
 
@@ -126,7 +129,7 @@ void *run(void *ptr)
 	if (!conn)
 		return;
 
-	pthread_mutex_lock(&lock[index]);
+	pthread_mutex_lock(&locks[index]);
 
 	res = PQexec(conn, "\
 SELECT c.relname, pg_size_pretty(pg_relation_size(c.oid)) AS size \
@@ -153,6 +156,6 @@ ORDER BY 1");
 
 	PQclear(res);
 
-	pthread_mutex_unlock(&lock[index]);
+	pthread_mutex_unlock(&locks[index]);
 }
 
