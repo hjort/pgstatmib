@@ -20,8 +20,9 @@ main(int argc, char **argv)
 	char conninfo[MAX_NAME_LENGTH + 7];
 	PGconn *conn;
 	PGresult *res;
-	int i, j, ndbs, ret;
-	pthread_t thread[MAX_DATABASES][MAX_SQL_THREADS];
+	int i, j, ndbs, nreqs, ret;
+	pthread_t **threads;
+	//pthread_t thread[MAX_DATABASES][MAX_SQL_THREADS];
 
 	memset(dbnames, 0, sizeof(dbnames));
 
@@ -80,21 +81,29 @@ main(int argc, char **argv)
 		}
 	}
 
+	nreqs = MAX_SQL_THREADS;
+	//typedef unsigned long int pthread_t;
+
 	fprintf(stdout, "Creating threads:\n");
+	threads = malloc(nreqs * ndbs * sizeof(pthread_t));
+	//memset(threads, 0, nreqs * ndbs * sizeof(pthread_t));
 	for (i = 0; i < ndbs; i++) {
-		for (j = 0; j < MAX_SQL_THREADS; j++) {
-			//fprintf(stdout, "%d) %p\n", i + 1, conns[i]);
-			ret = pthread_create(&thread[i][j], NULL, run, (void*) i);
-			//fprintf(stdout, "%d) ret = %d\n", i + 1, ret);
+		for (j = 0; j < nreqs; j++) {
+			fprintf(stdout, "%d:%d) conn: %p\n", i + 1, j + 1, conns[i]);
+			//fprintf(stdout, "%llu\n", &threads[i][j]);
+			//threads[i*(nreqs-1)+j-1]);
+			ret = pthread_create(&threads[i][j], NULL, run, (void*) i); // FIXME: causing core dump
+			fprintf(stdout, "%d) ret = %d\n", i + 1, ret);
 		}
 	}
 
 	fprintf(stdout, "Joining threads:\n");
 	for (i = 0; i < ndbs; i++) {
-		for (j = 0; j < MAX_SQL_THREADS; j++) {
-			pthread_join(thread[i][j], NULL);
+		for (j = 0; j < nreqs; j++) {
+			pthread_join(threads[i][j], NULL);
 		}
 	}
+	free(threads);
 
 	fprintf(stdout, "Destroying mutexes:\n");
 	for (i = 0; i < ndbs; i++) {
@@ -122,6 +131,8 @@ void *run(void *ptr)
 	PGconn *conn;
 	PGresult *res;
 	int index, i;
+
+	fprintf(stdout, "Running thread:\n");
 
 	index = (int)ptr;
 	conn = conns[index];
