@@ -14,7 +14,7 @@ pgsql MODULE-IDENTITY
 	ORGANIZATION "pgStatMIB Development Team"
 	CONTACT-INFO
 		"E-mail: pgstatmib@hjort.co
-		WWW: http://pgxn.org/dist/pgstatmib"
+		WWW: http://github.com/hjort/pgstatmib"
 	DESCRIPTION
 		"MIB to describe PostgreSQL statistics aiming at monitoring database activity"
 
@@ -36,7 +36,7 @@ pgstatServerDatabaseCount OBJECT-TYPE
 		"Number of databases in the server instance."
 	::= { pgstatServer 1 }
 
-pgstatServerTotalSize OBJECT-TYPE
+pgstatServerSize OBJECT-TYPE
     SYNTAX     Unsigned32
     MAX-ACCESS read-only
     STATUS     current
@@ -44,7 +44,7 @@ pgstatServerTotalSize OBJECT-TYPE
         "Sum of all database sizes (in bytes)."
     ::= { pgstatServer 2 }
 
-pgstatServerTotalBackends OBJECT-TYPE
+pgstatServerBackends OBJECT-TYPE
     SYNTAX     Gauge32
     MAX-ACCESS read-only
     STATUS     current
@@ -52,7 +52,7 @@ pgstatServerTotalBackends OBJECT-TYPE
         "Total number of backends (i.e., connections) in the server."
     ::= { pgstatServer 3 }
 
-pgstatServerTotalCommits OBJECT-TYPE
+pgstatServerCommits OBJECT-TYPE
     SYNTAX     Counter32
     MAX-ACCESS read-only
     STATUS     current
@@ -60,7 +60,7 @@ pgstatServerTotalCommits OBJECT-TYPE
         "Total number of commits in the server."
     ::= { pgstatServer 4 }
 
-pgstatServerTotalRollbacks OBJECT-TYPE
+pgstatServerRollbacks OBJECT-TYPE
     SYNTAX     Counter32
     MAX-ACCESS read-only
     STATUS     current
@@ -68,7 +68,7 @@ pgstatServerTotalRollbacks OBJECT-TYPE
         "Total number of rollbacks in the server."
     ::= { pgstatServer 5 }
 
-pgstatServerTotalBlocksRead OBJECT-TYPE
+pgstatServerBlocksRead OBJECT-TYPE
     SYNTAX     Counter32
     MAX-ACCESS read-only
     STATUS     current
@@ -76,7 +76,7 @@ pgstatServerTotalBlocksRead OBJECT-TYPE
         "Total number of blocks read in the server (i.e., physical access was made)."
     ::= { pgstatServer 6 }
 
-pgstatServerTotalBlocksHit OBJECT-TYPE
+pgstatServerBlocksHit OBJECT-TYPE
     SYNTAX     Counter32
     MAX-ACCESS read-only
     STATUS     current
@@ -123,22 +123,23 @@ pgstatDatabaseEntry OBJECT-TYPE
     ::= { pgstatDatabaseTable 1 }
 
 PgStatDatabaseEntry ::= SEQUENCE {
-	pgstatDatabaseId		Integer32,
-	pgstatDatabaseName		DisplayString,
-	pgstatDatabaseBackends		Gauge32,
-	pgstatDatabaseCommits		Counter32,
-	pgstatDatabaseRollbacks		Counter32,
-	pgstatDatabaseBlocksRead	Counter32,
-	pgstatDatabaseBlocksHit		Counter32,
+	pgstatDatabaseId				Integer32,
+	pgstatDatabaseName				DisplayString,
+    pgstatDatabaseSize				Unsigned32,
+	pgstatDatabaseBackends			Gauge32,
+	pgstatDatabaseCommits			Counter32,
+	pgstatDatabaseRollbacks			Counter32,
+	pgstatDatabaseBlocksRead		Counter32,
+	pgstatDatabaseBlocksHit			Counter32,
 	pgstatDatabaseTuplesReturned	Counter32,
-	pgstatDatabaseTuplesFetched	Counter32,
+	pgstatDatabaseTuplesFetched		Counter32,
 	pgstatDatabaseTuplesInserted	Counter32,
-	pgstatDatabaseTuplesUpdated	Counter32,
-	pgstatDatabaseTuplesDeleted	Counter32,
-	pgstatDatabaseRollbackRatio	Integer32,
-	pgstatDatabaseCacheHitRatio	Integer32,
+	pgstatDatabaseTuplesUpdated		Counter32,
+	pgstatDatabaseTuplesDeleted		Counter32,
+	pgstatDatabaseRollbackRatio		Integer32,
+	pgstatDatabaseCacheHitRatio		Integer32,
 	pgstatDatabaseTuplesModified	Counter32
-    }
+}
 
 pgstatDatabaseId OBJECT-TYPE
     SYNTAX     Integer32 (1..2147483647)
@@ -156,13 +157,21 @@ pgstatDatabaseName OBJECT-TYPE
         "Name of this database (datname)."
     ::= { pgstatDatabaseEntry 2 }
 
+pgstatDatabaseSize OBJECT-TYPE
+    SYNTAX     Unsigned32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Disk space used by the database (in bytes)."
+    ::= { pgstatDatabaseEntry 3 }
+
 pgstatDatabaseBackends OBJECT-TYPE
     SYNTAX     Gauge32
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
         "Number of backends currently connected to this database (numbackends). This is the only column in this view that returns a value reflecting current state; all other columns return the accumulated values since the last reset."
-    ::= { pgstatDatabaseEntry 3 }
+    ::= { pgstatDatabaseEntry 4 }
 
 pgstatDatabaseCommits OBJECT-TYPE
     SYNTAX     Counter32
@@ -170,7 +179,7 @@ pgstatDatabaseCommits OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of transactions in this database that have been committed (xact_commit)."
-    ::= { pgstatDatabaseEntry 4 }
+    ::= { pgstatDatabaseEntry 5 }
 
 pgstatDatabaseRollbacks OBJECT-TYPE
     SYNTAX     Counter32
@@ -178,7 +187,7 @@ pgstatDatabaseRollbacks OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of transactions in this database that have been rolled back (xact_rollback)."
-    ::= { pgstatDatabaseEntry 5 }
+    ::= { pgstatDatabaseEntry 6 }
 
 pgstatDatabaseBlocksRead OBJECT-TYPE
     SYNTAX     Counter32
@@ -186,7 +195,7 @@ pgstatDatabaseBlocksRead OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of disk blocks read in this database (blks_read)."
-    ::= { pgstatDatabaseEntry 6 }
+    ::= { pgstatDatabaseEntry 7 }
 
 pgstatDatabaseBlocksHit OBJECT-TYPE
     SYNTAX     Counter32
@@ -194,7 +203,7 @@ pgstatDatabaseBlocksHit OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of times disk blocks were found already in the buffer cache, so that a read was not necessary (blks_hit). This only includes hits in the PostgreSQL buffer cache, not the operating system's file system cache."
-    ::= { pgstatDatabaseEntry 7 }
+    ::= { pgstatDatabaseEntry 8 }
 
 pgstatDatabaseTuplesReturned OBJECT-TYPE
     SYNTAX     Counter32
@@ -202,7 +211,7 @@ pgstatDatabaseTuplesReturned OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of rows returned by queries in this database (tup_returned)."
-    ::= { pgstatDatabaseEntry 8 }
+    ::= { pgstatDatabaseEntry 9 }
 
 pgstatDatabaseTuplesFetched OBJECT-TYPE
     SYNTAX     Counter32
@@ -210,7 +219,7 @@ pgstatDatabaseTuplesFetched OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of rows fetched by queries in this database (tup_fetched)."
-    ::= { pgstatDatabaseEntry 9 }
+    ::= { pgstatDatabaseEntry 10 }
 
 pgstatDatabaseTuplesInserted OBJECT-TYPE
     SYNTAX     Counter32
@@ -218,7 +227,7 @@ pgstatDatabaseTuplesInserted OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of rows inserted by queries in this database (tup_inserted)."
-    ::= { pgstatDatabaseEntry 10 }
+    ::= { pgstatDatabaseEntry 11 }
 
 pgstatDatabaseTuplesUpdated OBJECT-TYPE
     SYNTAX     Counter32
@@ -226,7 +235,7 @@ pgstatDatabaseTuplesUpdated OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of rows updated by queries in this database (tup_updated)."
-    ::= { pgstatDatabaseEntry 11 }
+    ::= { pgstatDatabaseEntry 12 }
 
 pgstatDatabaseTuplesDeleted OBJECT-TYPE
     SYNTAX     Counter32
@@ -234,14 +243,6 @@ pgstatDatabaseTuplesDeleted OBJECT-TYPE
     STATUS     current
     DESCRIPTION
         "Number of rows deleted by queries in this database (tup_deleted)."
-    ::= { pgstatDatabaseEntry 12 }
-
-pgstatDatabaseSize OBJECT-TYPE
-    SYNTAX     Unsigned32
-    MAX-ACCESS read-only
-    STATUS     current
-    DESCRIPTION
-        "Disk space used by the database (in bytes)."
     ::= { pgstatDatabaseEntry 13 }
 
 pgstatDatabaseRollbackRatio OBJECT-TYPE
@@ -270,11 +271,9 @@ pgstatDatabaseTuplesModified OBJECT-TYPE
 
 ----------------------------------------------------------------
 
-----------------------------------------------------------------
-
 -- http://www.postgresql.org/docs/current/static/monitoring-stats.html#PG-STAT-BGWRITER-VIEW
 
-pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 10 }
+pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 20 }
 
 pgstatBgWriterCheckpointsTimed OBJECT-TYPE
 	SYNTAX		Counter32

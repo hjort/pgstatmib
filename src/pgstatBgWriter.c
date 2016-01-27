@@ -7,7 +7,7 @@
 #include "pgstatmibd.h"
 #include "pgstatBgWriter.h"
 
-static oid pgstatBgWriter_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 10 };
+static oid pgstatBgWriter_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 20 };
 
 struct variable1 pgstatBgWriter_vars[] = {
     {PGSTATBGWRITER_CHECKPOINTSTIMED, 		ASN_COUNTER, RONLY, getvalue_pgstatBgWriter, 1, {1}},

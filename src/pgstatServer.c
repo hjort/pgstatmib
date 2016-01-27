@@ -11,12 +11,12 @@ static oid pgstatServer_oid[] = { 1, 3, 6, 1, 4, 1, 27645, 3, 1 };
 
 struct variable1 pgstatServer_vars[] = {
     {PGSTATSERVER_DATABASECOUNT, 	ASN_INTEGER, RONLY, getvalue_pgstatServer, 1, {1}},
-    {PGSTATSERVER_TOTALSIZE, 		ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {2}},
-    {PGSTATSERVER_TOTALBACKENDS, 	ASN_GAUGE, RONLY, getvalue_pgstatServer, 1, {3}},
-    {PGSTATSERVER_TOTALCOMMITS, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {4}},
-    {PGSTATSERVER_TOTALROLLBACKS, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {5}},
-    {PGSTATSERVER_TOTALBLOCKSREAD, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {6}},
-    {PGSTATSERVER_TOTALBLOCKSHIT, 	ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {7}},
+    {PGSTATSERVER_SIZE, 			ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {2}},
+    {PGSTATSERVER_BACKENDS, 		ASN_GAUGE, RONLY, getvalue_pgstatServer, 1, {3}},
+    {PGSTATSERVER_COMMITS, 			ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {4}},
+    {PGSTATSERVER_ROLLBACKS, 		ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {5}},
+    {PGSTATSERVER_BLOCKSREAD, 		ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {6}},
+    {PGSTATSERVER_BLOCKSHIT, 		ASN_COUNTER, RONLY, getvalue_pgstatServer, 1, {7}},
     {PGSTATSERVER_ROLLBACKRATIO, 	ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {8}},
     {PGSTATSERVER_CACHEHITRATIO, 	ASN_UNSIGNED, RONLY, getvalue_pgstatServer, 1, {9}}
 };
@@ -104,17 +104,17 @@ getvalue_pgstatServer(struct variable *vp,
     switch (vp->magic) {
     case PGSTATSERVER_DATABASECOUNT:
         return (u_char *) & pgstatServer_data.database_count;
-    case PGSTATSERVER_TOTALSIZE:
+    case PGSTATSERVER_SIZE:
         return (u_char *) & pgstatServer_data.total_size;
-    case PGSTATSERVER_TOTALBACKENDS:
+    case PGSTATSERVER_BACKENDS:
         return (u_char *) & pgstatServer_data.total_backends;
-    case PGSTATSERVER_TOTALCOMMITS:
+    case PGSTATSERVER_COMMITS:
         return (u_char *) & pgstatServer_data.total_commits;
-    case PGSTATSERVER_TOTALROLLBACKS:
+    case PGSTATSERVER_ROLLBACKS:
         return (u_char *) & pgstatServer_data.total_rollbacks;
-    case PGSTATSERVER_TOTALBLOCKSREAD:
+    case PGSTATSERVER_BLOCKSREAD:
         return (u_char *) & pgstatServer_data.total_blks_read;
-    case PGSTATSERVER_TOTALBLOCKSHIT:
+    case PGSTATSERVER_BLOCKSHIT:
         return (u_char *) & pgstatServer_data.total_blks_hit;
     case PGSTATSERVER_ROLLBACKRATIO:
         return (u_char *) & pgstatServer_data.rollback_ratio;

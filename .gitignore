@@ -4,3 +4,6 @@
 
 # Editor backups
 *~
+
+# Binary
+src/pgstatmibd
