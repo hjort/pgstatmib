@@ -10,19 +10,21 @@ IMPORTS
 		FROM SNMPv2-TC;
 
 pgsql MODULE-IDENTITY
-	LAST-UPDATED "201109062145Z"	-- 06 September 2011
-	ORGANIZATION "pgstatmib Development Team"
+	LAST-UPDATED "201601262134Z"	-- 26 January 2016
+	ORGANIZATION "pgStatMIB Development Team"
 	CONTACT-INFO
-		"E-mail: pgstatmib-devel@pgfoundry.org
-		WWW: http://pgstatmib.projects.postgresql.org"
+		"E-mail: pgstatmib@hjort.co
+		WWW: http://pgxn.org/dist/pgstatmib"
 	DESCRIPTION
-		"MIB to describe PostgreSQL statistics"
+		"MIB to describe PostgreSQL statistics aiming at monitoring database activity"
 
 	::= { enterprises 27645 }
 
 pgStatMIB 	OBJECT IDENTIFIER ::= { pgsql 3 }
 
 ----------------------------------------------------------------
+
+-- http://www.postgresql.org/docs/current/static/monitoring-stats.html
 
 pgstatServer	OBJECT IDENTIFIER ::= { pgStatMIB 1 }
 
@@ -31,7 +33,7 @@ pgstatServerDatabaseCount OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"number of databases in the server instance"
+		"Number of databases in the server instance."
 	::= { pgstatServer 1 }
 
 pgstatServerTotalSize OBJECT-TYPE
@@ -39,7 +41,7 @@ pgstatServerTotalSize OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "sum of all database sizes"
+        "Sum of all database sizes (in bytes)."
     ::= { pgstatServer 2 }
 
 pgstatServerTotalBackends OBJECT-TYPE
@@ -47,7 +49,7 @@ pgstatServerTotalBackends OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "total number of backends in the server"
+        "Total number of backends (i.e., connections) in the server."
     ::= { pgstatServer 3 }
 
 pgstatServerTotalCommits OBJECT-TYPE
@@ -55,7 +57,7 @@ pgstatServerTotalCommits OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "total number of commits in the server"
+        "Total number of commits in the server."
     ::= { pgstatServer 4 }
 
 pgstatServerTotalRollbacks OBJECT-TYPE
@@ -63,7 +65,7 @@ pgstatServerTotalRollbacks OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "total number of rollbacks in the server"
+        "Total number of rollbacks in the server."
     ::= { pgstatServer 5 }
 
 pgstatServerTotalBlocksRead OBJECT-TYPE
@@ -71,7 +73,7 @@ pgstatServerTotalBlocksRead OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "total number of blocks read in the server"
+        "Total number of blocks read in the server (i.e., physical access was made)."
     ::= { pgstatServer 6 }
 
 pgstatServerTotalBlocksHit OBJECT-TYPE
@@ -79,7 +81,7 @@ pgstatServerTotalBlocksHit OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "total number of blocks hit in the server"
+        "Total number of blocks hit in the server (i.e., data retrieved from memory)."
     ::= { pgstatServer 7 }
 
 pgstatServerRollbackRatio OBJECT-TYPE
@@ -87,7 +89,7 @@ pgstatServerRollbackRatio OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "rollback ratio in the entire server"
+        "Rollback ratio in the entire server (the lower the better)."
     ::= { pgstatServer 8 }
 
 pgstatServerCacheHitRatio OBJECT-TYPE
@@ -95,17 +97,20 @@ pgstatServerCacheHitRatio OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "cache hit ratio in the entire server"
+        "Cache hit ratio in the entire server (the higher the better)."
     ::= { pgstatServer 9 }
 
 ----------------------------------------------------------------
+
+-- http://www.postgresql.org/docs/current/static/monitoring-stats.html#PG-STAT-DATABASE-VIEW
+-- http://www.postgresql.org/docs/current/static/functions-admin.html
 
 pgstatDatabaseTable OBJECT-TYPE
     SYNTAX     SEQUENCE OF PgStatDatabaseEntry
     MAX-ACCESS not-accessible
     STATUS     current
     DESCRIPTION
-        "TODO: The (conceptual) table of devices contained by the host."
+        "Contains one row for each database in the instance, showing database-wide statistics (pg_stat_database)."
     ::= { pgStatMIB 2 }
 
 pgstatDatabaseEntry OBJECT-TYPE
@@ -113,9 +118,7 @@ pgstatDatabaseEntry OBJECT-TYPE
     MAX-ACCESS not-accessible
     STATUS     current
     DESCRIPTION
-        "TODO: A (conceptual) entry for one device contained by the
-        host.  As an example, an instance of the hrDeviceType
-        object might be named hrDeviceType.3"
+        "An entry for one database contained by the instance."
     INDEX { pgstatDatabaseId }
     ::= { pgstatDatabaseTable 1 }
 
@@ -142,10 +145,7 @@ pgstatDatabaseId OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: A unique value for each device contained by the host.
-        The value for each device must remain constant at
-        least from one re-initialization of the agent to the
-        next re-initialization."
+        "A unique value for each database contained by the instance. Internally it represents the OID of a database in PostgreSQL (datid). Therefore, this value remains constant for each database regardless the agent is restarted."
     ::= { pgstatDatabaseEntry 1 }
 
 pgstatDatabaseName OBJECT-TYPE
@@ -153,7 +153,7 @@ pgstatDatabaseName OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: An indication of the type of device."
+        "Name of this database (datname)."
     ::= { pgstatDatabaseEntry 2 }
 
 pgstatDatabaseBackends OBJECT-TYPE
@@ -161,9 +161,7 @@ pgstatDatabaseBackends OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: A textual description of this device, including the
-        device's manufacturer and revision, and optionally,
-        its serial number."
+        "Number of backends currently connected to this database (numbackends). This is the only column in this view that returns a value reflecting current state; all other columns return the accumulated values since the last reset."
     ::= { pgstatDatabaseEntry 3 }
 
 pgstatDatabaseCommits OBJECT-TYPE
@@ -171,7 +169,7 @@ pgstatDatabaseCommits OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The product ID for this device."
+        "Number of transactions in this database that have been committed (xact_commit)."
     ::= { pgstatDatabaseEntry 4 }
 
 pgstatDatabaseRollbacks OBJECT-TYPE
@@ -179,8 +177,7 @@ pgstatDatabaseRollbacks OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The current operational state of the device described
-        by this row of the table."
+        "Number of transactions in this database that have been rolled back (xact_rollback)."
     ::= { pgstatDatabaseEntry 5 }
 
 pgstatDatabaseBlocksRead OBJECT-TYPE
@@ -188,12 +185,7 @@ pgstatDatabaseBlocksRead OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of disk blocks read in this database (blks_read)."
     ::= { pgstatDatabaseEntry 6 }
 
 pgstatDatabaseBlocksHit OBJECT-TYPE
@@ -201,12 +193,7 @@ pgstatDatabaseBlocksHit OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of times disk blocks were found already in the buffer cache, so that a read was not necessary (blks_hit). This only includes hits in the PostgreSQL buffer cache, not the operating system's file system cache."
     ::= { pgstatDatabaseEntry 7 }
 
 pgstatDatabaseTuplesReturned OBJECT-TYPE
@@ -214,12 +201,7 @@ pgstatDatabaseTuplesReturned OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of rows returned by queries in this database (tup_returned)."
     ::= { pgstatDatabaseEntry 8 }
 
 pgstatDatabaseTuplesFetched OBJECT-TYPE
@@ -227,12 +209,7 @@ pgstatDatabaseTuplesFetched OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of rows fetched by queries in this database (tup_fetched)."
     ::= { pgstatDatabaseEntry 9 }
 
 pgstatDatabaseTuplesInserted OBJECT-TYPE
@@ -240,12 +217,7 @@ pgstatDatabaseTuplesInserted OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of rows inserted by queries in this database (tup_inserted)."
     ::= { pgstatDatabaseEntry 10 }
 
 pgstatDatabaseTuplesUpdated OBJECT-TYPE
@@ -253,12 +225,7 @@ pgstatDatabaseTuplesUpdated OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of rows updated by queries in this database (tup_updated)."
     ::= { pgstatDatabaseEntry 11 }
 
 pgstatDatabaseTuplesDeleted OBJECT-TYPE
@@ -266,12 +233,7 @@ pgstatDatabaseTuplesDeleted OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: The number of errors detected on this device.  It
-        should be noted that as this object has a SYNTAX of
-        Counter32, that it does not have a defined initial
-        value.  However, it is recommended that this object be
-        initialized to zero, even though management stations
-        must not depend on such an initialization."
+        "Number of rows deleted by queries in this database (tup_deleted)."
     ::= { pgstatDatabaseEntry 12 }
 
 pgstatDatabaseSize OBJECT-TYPE
@@ -279,7 +241,7 @@ pgstatDatabaseSize OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: ..."
+        "Disk space used by the database (in bytes)."
     ::= { pgstatDatabaseEntry 13 }
 
 pgstatDatabaseRollbackRatio OBJECT-TYPE
@@ -287,7 +249,7 @@ pgstatDatabaseRollbackRatio OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: ..."
+        "The ratio in which rollbacks are raised over all operations made in the database."
     ::= { pgstatDatabaseEntry 14 }
 
 pgstatDatabaseCacheHitRatio OBJECT-TYPE
@@ -295,7 +257,7 @@ pgstatDatabaseCacheHitRatio OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: ..."
+        "The ratio in which data is already cached (i.e., found in memory) over all blocks reads made in the database."
     ::= { pgstatDatabaseEntry 15 }
 
 pgstatDatabaseTuplesModified OBJECT-TYPE
@@ -303,10 +265,14 @@ pgstatDatabaseTuplesModified OBJECT-TYPE
     MAX-ACCESS read-only
     STATUS     current
     DESCRIPTION
-        "TODO: ..."
+        "Number of rows inserted, updated and deleted by queries in this database."
     ::= { pgstatDatabaseEntry 16 }
 
 ----------------------------------------------------------------
+
+----------------------------------------------------------------
+
+-- http://www.postgresql.org/docs/current/static/monitoring-stats.html#PG-STAT-BGWRITER-VIEW
 
 pgstatBgWriter	OBJECT IDENTIFIER ::= { pgStatMIB 10 }
 
@@ -315,7 +281,7 @@ pgstatBgWriterCheckpointsTimed OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"checkpoints_timed: number of scheduled checkpoints"
+		"Number of scheduled checkpoints that have been performed (checkpoints_timed)."
 	::= { pgstatBgWriter 1 }
 
 pgstatBgWriterCheckpointsRequested OBJECT-TYPE
@@ -323,7 +289,7 @@ pgstatBgWriterCheckpointsRequested OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"checkpoints_req: number of requested checkpoints"
+		"Number of requested checkpoints that have been performed (checkpoints_req)."
 	::= { pgstatBgWriter 2 }
 
 pgstatBgWriterBuffersCheckpoint OBJECT-TYPE
@@ -331,7 +297,7 @@ pgstatBgWriterBuffersCheckpoint OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"buffers_checkpoint: buffers written by checkpoints"
+		"Number of buffers written during checkpoints (buffers_checkpoint)."
 	::= { pgstatBgWriter 3 }
 
 pgstatBgWriterBuffersClean OBJECT-TYPE
@@ -339,7 +305,7 @@ pgstatBgWriterBuffersClean OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"buffers_clean: buffers written by cleaning scans"
+		"Number of buffers written by the background writer (buffers_clean)."
 	::= { pgstatBgWriter 4 }
 
 pgstatBgWriterMaxWrittenClean OBJECT-TYPE
@@ -347,7 +313,7 @@ pgstatBgWriterMaxWrittenClean OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"maxwritten_clean: the number of times the background writer stopped a cleaning scan because it had written too many buffers"
+		"Number of times the background writer stopped a cleaning scan because it had written too many buffers (maxwritten_clean)."
 	::= { pgstatBgWriter 5 }
 
 pgstatBgWriterBuffersBackend OBJECT-TYPE
@@ -355,7 +321,7 @@ pgstatBgWriterBuffersBackend OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"buffers_backend: buffers written by backends (that is, not by the background writer)"
+		"Number of buffers written directly by a backend (buffers_backend)."
 	::= { pgstatBgWriter 6 }
 
 pgstatBgWriterBuffersAllocated OBJECT-TYPE
@@ -363,7 +329,7 @@ pgstatBgWriterBuffersAllocated OBJECT-TYPE
 	MAX-ACCESS	read-only
 	STATUS		current
 	DESCRIPTION
-		"buffers_alloc: total buffers allocated"
+		"Number of buffers allocated (buffers_alloc)."
 	::= { pgstatBgWriter 7 }
 
 ---------------------------------------
