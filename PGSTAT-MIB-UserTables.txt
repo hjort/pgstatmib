@@ -1,0 +1,96 @@
+-- http://www.postgresql.org/docs/current/static/monitoring-stats.html#PG-STAT-ALL-TABLES-VIEW
+
+pgstatUserTableTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF PgStatUserTableEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "Contains one row for each table in the current database (including TOAST tables), showing statistics about accesses to that specific user table (pg_stat_user_tables)."
+    ::= { pgStatMIB 3 }
+
+pgstatUserTableEntry OBJECT-TYPE
+    SYNTAX     PgStatUserTableEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+        "An entry for one table contained by the database."
+    INDEX { pgstatUserTableId }
+    ::= { pgstatUserTableTable 1 }
+
+PgStatUserTableEntry ::= SEQUENCE {
+	pgstatUserTableId					Integer32,
+	pgstatUserTableSchema				DisplayString,
+	pgstatUserTableName					DisplayString,
+	pgstatUserTableSize					Unsigned32,
+	pgstatUserTableTotalSize			Unsigned32,
+	pgstatUserTableSeqScans				Counter32,
+
+	pgstatUserTableSeqTuplesRead		Counter32,
+	pgstatUserTableIdxScans				Counter32,
+	pgstatUserTableIdxTuplesFetched		Counter32,
+	pgstatUserTableTuplesInserted		Counter32,
+	pgstatUserTableTuplesUpdated		Counter32,
+	pgstatUserTableTuplesDeleted		Counter32,
+	pgstatUserTableTuplesHotUpdated		Counter32,
+	pgstatUserTableLiveTuples			Gauge32,
+	pgstatUserTableDeadTuples			Gauge32,
+	pgstatUserTableVacuumCount			Counter32,
+	pgstatUserTableAutovacuumCount		Counter32,
+	pgstatUserTableAnalyzeCount			Counter32,
+	pgstatUserTableAutoanalyzeCount		Counter32,
+	pgstatUserTableIdxScanRatio			Integer32,
+	pgstatUserTableTuplesModified		Counter32
+}
+
+pgstatUserTableId OBJECT-TYPE
+    SYNTAX     Integer32 (1..2147483647)
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "A unique value for each table contained by the database. Internally it represents the OID of a table in PostgreSQL (relid). Therefore, this value remains constant for each database regardless the agent is restarted."
+    ::= { pgstatUserTableEntry 1 }
+
+pgstatUserTableSchema OBJECT-TYPE
+    SYNTAX     DisplayString (SIZE (0..64))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Name of the schema that this table is in (schemaname)."
+    ::= { pgstatUserTableEntry 2 }
+
+pgstatUserTableName OBJECT-TYPE
+    SYNTAX     DisplayString (SIZE (0..64))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Name of this table (relname)."
+    ::= { pgstatUserTableEntry 3 }
+
+pgstatUserTableSize OBJECT-TYPE
+    SYNTAX     Unsigned32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Disk space (in bytes) used by the specified table, excluding indexes, but including TOAST, free space map, and visibility map (pg_table_size function)."
+    ::= { pgstatUserTableEntry 4 }
+
+pgstatUserTableTotalSize OBJECT-TYPE
+    SYNTAX     Unsigned32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Total disk space (in bytes) used by the specified table, including all indexes and TOAST data (pg_total_relation_size function)."
+    ::= { pgstatUserTableEntry 5 }
+
+pgstatUserTableSeqScans OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Number of sequential scans initiated on this table (seq_scan)."
+    ::= { pgstatUserTableEntry 6 }
+
+-- TODO...
+
+----------------------------------------------------------------
+
