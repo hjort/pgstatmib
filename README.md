@@ -74,13 +74,16 @@ enterprises.pgsql (1.3.6.1.4.1.27645)
 
 `$ snmpget localhost pgstatServerRollbackRatio.0 pgstatServerCacheHitRatio.0`
 
+```
 PGSTAT-MIB::pgstatServerRollbackRatio.0 = Gauge32: 80
 PGSTAT-MIB::pgstatServerCacheHitRatio.0 = Gauge32: 9987
+```
 
 ### Get all server-wide values
 
 `$ snmpwalk localhost pgstatServer`
 
+```
 PGSTAT-MIB::pgstatServerDatabaseCount.0 = INTEGER: 8
 PGSTAT-MIB::pgstatServerSize.0 = Gauge32: 708466976
 PGSTAT-MIB::pgstatServerBackends.0 = Gauge32: 2
@@ -90,11 +93,13 @@ PGSTAT-MIB::pgstatServerBlocksRead.0 = Counter32: 41803
 PGSTAT-MIB::pgstatServerBlocksHit.0 = Counter32: 32249781
 PGSTAT-MIB::pgstatServerRollbackRatio.0 = Gauge32: 80
 PGSTAT-MIB::pgstatServerCacheHitRatio.0 = Gauge32: 9987
+```
 
 ### Get values from all databases in the server
 
 `$ snmpwalk localhost pgstatDatabase`
 
+```
 PGSTAT-MIB::pgstatDatabaseId.12070 = INTEGER: 12070
 PGSTAT-MIB::pgstatDatabaseId.16386 = INTEGER: 16386
 PGSTAT-MIB::pgstatDatabaseName.12070 = STRING: postgres
@@ -127,23 +132,29 @@ PGSTAT-MIB::pgstatDatabaseCacheHitRatio.12070 = Gauge32: 9784
 PGSTAT-MIB::pgstatDatabaseCacheHitRatio.16386 = Gauge32: 9836
 PGSTAT-MIB::pgstatDatabaseTuplesModified.12070 = Counter32: 0
 PGSTAT-MIB::pgstatDatabaseTuplesModified.16386 = Counter32: 7
+```
 
 ### Get a single value from a specified database (numeric form)
 
 `$ snmpget localhost pgstatDatabaseBackends.12070 -On`
 
+```
 .1.3.6.1.4.1.27645.3.2.1.4.12070 = Gauge32: 2
+```
 
 ### Get a single value from a specified database (description form)
 
 `$ snmpget localhost pgstatDatabaseRollbacks.16386 -Of`
 
+```
 .iso.org.dod.internet.private.enterprises.pgsql.pgStatMIB.pgstatDatabaseTable.pgstatDatabaseEntry.pgstatDatabaseRollbacks.16386 = Counter32: 2
+```
 
 ### Get multiple values from all databases (tabular form)
 
 `$ snmptable localhost -Cl -CB -Ci -OX -Cb -Cc 16 -Cw 80 pgstatDatabaseTable`
 
+```
 SNMP table: PGSTAT-MIB::pgstatDatabaseTable
 
 Id              Name            Size            Backends        Commits         
@@ -162,11 +173,13 @@ index: [16386]
 2               880             52619           559879          18830           
 0               7               0               15              9836            
 7               
+```
 
 ### Get all values from background writer
 
 `$ snmpwalk localhost pgstatBgWriter`
 
+```
 PGSTAT-MIB::pgstatBgWriterCheckpointsTimed.0 = Counter32: 188
 PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = Counter32: 8
 PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = Counter32: 40275
@@ -174,18 +187,23 @@ PGSTAT-MIB::pgstatBgWriterBuffersClean.0 = Counter32: 0
 PGSTAT-MIB::pgstatBgWriterMaxWrittenClean.0 = Counter32: 0
 PGSTAT-MIB::pgstatBgWriterBuffersBackend.0 = Counter32: 38153
 PGSTAT-MIB::pgstatBgWriterBuffersAllocated.0 = Counter32: 43407
+```
 
 ### Get a single value from background writer (exact form)
 
 `$ snmpget localhost pgstatBgWriterCheckpointsRequested.0`
 
+```
 PGSTAT-MIB::pgstatBgWriterCheckpointsRequested.0 = Counter32: 8
+```
 
 ### Get a single value from background writer (approximate form)
 
 `$ snmpgetnext localhost pgstatBgWriterBuffersCheckpoint`
 
+```
 PGSTAT-MIB::pgstatBgWriterBuffersCheckpoint.0 = Counter32: 40275
+```
 
 ## Status of expected sub-trees
 
